@@ -1,0 +1,10 @@
+{
+	"id": "com.thynctank.cheque",
+	"version": "0.1",
+	"vendor": "Thynctank",
+	"vendorurl": "http://www.thynctank.com",
+	"type": "web",
+	"main": "index.html",
+	"title": "Cheque",
+	"icon": "icon.png"
+}

@@ -1,0 +1,1 @@
+Cheque is a checkbook application for webOS
