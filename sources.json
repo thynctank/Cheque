@@ -3,5 +3,9 @@
     {
         "scenes": "dashboard",
         "source": "app\/assistants\/dashboard-assistant.js"
+    },
+    {
+        "scenes": "account",
+        "source": "app\/assistants\/account-assistant.js"
     }
 ]
