@@ -14,7 +14,7 @@ AccountAssistant.prototype.setup = function() {
 	this.controller.setupWidget("backButton", {}, {});
 	/* add event handlers to listen to events from widgets */
 	this.controller.listen("backButton", Mojo.Event.tap, function() {
-	  this.controller.stageController.popScene();
+	  this.controller.stageController.swapScene("dashboard");
 	}.bindAsEventListener(this));
 };
 
