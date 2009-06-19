@@ -18,12 +18,9 @@ DashboardAssistant.prototype.setup = function() {
 DashboardAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
-	$$(".account").each(function(acct, i, accts) {
-	  var controller = this.controller;
-	  acct.addEvent("click", function() {
-	    this.controller.stageController.pushScene("account");
-	  }.bind(this));
-  }, this);
+	$$(".account").invoke("observe", "click", function(evt) {
+    this.controller.stageController.pushScene("account");
+  }.bind(this), this);
 };
 
 
