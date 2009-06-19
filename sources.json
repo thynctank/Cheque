@@ -7,5 +7,17 @@
     {
         "scenes": "account",
         "source": "app\/assistants\/account-assistant.js"
+    },
+    {
+        "scenes": "dashboard, account",
+        "source": "lib\/cheque.js"
+    },
+    {
+        "scenes": "account",
+        "source": "lib\/account.js"
+    },
+    {
+        "scenes": "transaction",
+        "source": "app\/assistants\/transaction-assistant.js"
     }
 ]
