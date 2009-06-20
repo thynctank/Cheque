@@ -1,5 +1,7 @@
 [
     {"source": "app\/assistants\/stage-assistant.js"},
+    {"source": "lib\/hash.js"},
+    {"source": "platform_storage.js"},
     {
         "scenes": "dashboard",
         "source": "app\/assistants\/dashboard-assistant.js"
