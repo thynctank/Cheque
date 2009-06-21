@@ -4,7 +4,7 @@
 #
 # Host: localhost (MySQL 5.0.41)
 # Database: cheque
-# Generation Time: 2009-06-20 18:18:30 -0400
+# Generation Time: 2009-06-20 18:54:06 -0400
 # ************************************************************
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -40,12 +40,14 @@ CREATE TABLE `entries` (
   `id` int(11) NOT NULL auto_increment,
   `account_id` int(11) NOT NULL,
   `type` varchar(30) NOT NULL default '',
+  `subject` varchar(30) NOT NULL default '',
   `amount` int(11) NOT NULL,
   `date` varchar(30) NOT NULL default '',
   `memo` text,
   `transfer_account_id` int(11) default NULL,
   `transfer_entry_id` int(11) default NULL,
   `pending` tinyint(4) NOT NULL default '1',
+  `check_number` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
