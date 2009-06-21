@@ -8,7 +8,7 @@
 	<script src="lib/hash.js" type="text/javascript" charset="utf-8"></script>
 	<script src="lib/account.js" type="text/javascript" charset="utf-8"></script>
 	<script src="lib/cheque.js" type="text/javascript" charset="utf-8"></script>
-	<script src="platform_storage.js" type="text/javascript" charset="utf-8"></script>
+	<script src="storage.js" type="text/javascript" charset="utf-8"></script>
   
 	<!-- application stylesheet should come in after the one loaded by the framework -->
 	<link href="stylesheets/cheque.css" media="screen" rel="stylesheet" type="text/css" />
@@ -16,10 +16,8 @@
 <body>
   <script type="text/javascript" charset="utf-8">
     cheque = new Cheque();
-    a1 = new Account("Bank of America");
-    a2 = new Account("Congressional");
-    cheque.accounts.set(a1.name, a1);
-    cheque.accounts.set(a2.name, a2);
+    cheque.addAccount("Bank of America");
+    cheque.addAccount("Congressional");
   </script>
 </body>
 </html>
