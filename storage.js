@@ -1,5 +1,8 @@
-var Storage = {
-  db: openDatabase("Cheque"),
+function Storage() {
+  this.db = openDatabase("Cheque");
+} 
+
+Storage.prototype = {
   _buildRows: function(resultSet) {
     var rows = [];
     for(var i = 0, j = resultSet.rows.length; i < j; i++) {
