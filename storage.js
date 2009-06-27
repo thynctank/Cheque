@@ -1,17 +1,36 @@
 var Storage = {
   db: openDatabase("Cheque"),
+  _buildRows: function(resultSet) {
+    var rows = [];
+    for(var i = 0, j = resultSet.rows.length; i < j; i++) {
+      rows.push(resultSet.rows.item(i));
+    }
+    return rows;
+  },
+  // success always takes an array of row objects, failure takes an error string
   run: function(sql, success, failure) {
+    var self = this;
+    if(success) {
+      var oldSuccess = success;
+      success = function(resultSet) {
+        oldSuccess(self._buildRows(resultSet));
+      };
+    }
+    else {
+      success = function(resultSet) {
+        console.log(self._buildRows(resultSet));
+      };
+    }
+    
     console.log(sql);
     this.db.transaction(function(tx) {
       tx.executeSql(sql, [], 
         function(tx, resultSet) {
-          console.log("Success");
-          if(success)
-            success(resultSet);
+          success(resultSet);
         },
         function(tx, error) {
           if(failure)
-            failure(error);
+            failure(error.message);
         }
       );
     });
@@ -32,6 +51,20 @@ var Storage = {
   },
   // conditions is obj literal with {colName: reqVal, colName: reqVal}
   read: function(table, conditions, success, failure) {
+    var conditionSql = "";
+    for(colName in conditions) {
+      if(typeof conditions[colName] === "string")
+        conditionSql += colName + " = '" + conditions[colName] + "' AND ";
+      else
+        conditionSql += colName + " = " + conditions[colName] + " AND ";
+    }
+    conditionSql = conditionSql.slice(0, -4);
+    
+    var sql = "SELECT * FROM " + table;
+    if(conditions)
+      sql += " WHERE " + conditionSql;
+
+    this.run(sql, success, failure);
   },
   // data is obj literal with {colName: colVal, colName: colVal}
   write: function(table, data, success, failure) {
