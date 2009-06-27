@@ -20,7 +20,7 @@ Storage.prototype = {
       };
     }
     else {
-      success = function(resultSet) {
+      var success = function(resultSet) {
         console.log(self._buildRows(resultSet));
       };
     }
@@ -45,7 +45,7 @@ Storage.prototype = {
       colSql += ", " + colName + " " + cols[colName];
     }
     
-    var sql = "CREATE TABLE " + name + " (id INTEGER PRIMARY KEY AUTOINCREMENT" + colSql + ")";
+    var sql = "CREATE TABLE IF NOT EXISTS " + name + " (id INTEGER PRIMARY KEY AUTOINCREMENT" + colSql + ")";
     this.run(sql, success, failure);
   },
   dropTable: function(name, success, failure) {
@@ -68,6 +68,21 @@ Storage.prototype = {
       sql += " WHERE " + conditionSql;
 
     this.run(sql, success, failure);
+  },
+  // success always takes # of rows
+  count: function(table, conditions, success, failure) {
+    if(success) {
+      var oldSuccess = success;
+      success = function(rows) {
+        oldSuccess(rows.length);
+      };
+    }
+    else {
+      var success = function(rows) {
+        console.log(rows.length);
+      };
+    }
+    this.read(table, conditions, success, failure);
   },
   // data is obj literal with {colName: colVal, colName: colVal}
   write: function(table, data, success, failure) {
