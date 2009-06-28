@@ -1,6 +1,6 @@
 [
     {"source": "app\/assistants\/stage-assistant.js"},
-    {"source": "lib\/hash.js"},
+    // {"source": "lib\/chequelib\/hash.js"},
     {"source": "storage.js"},
     {
         "scenes": "dashboard",
@@ -12,11 +12,11 @@
     },
     {
         "scenes": "dashboard, account",
-        "source": "lib\/cheque.js"
+        "source": "lib\/chequelib\/cheque.js"
     },
     {
         "scenes": "account",
-        "source": "lib\/account.js"
+        "source": "lib\/chequelib\/account.js"
     },
     {
         "scenes": "transaction",
