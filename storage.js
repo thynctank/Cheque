@@ -1,5 +1,5 @@
-function Storage() {
-  this.db = openDatabase("Cheque");
+function Storage(name) {
+  this.db = openDatabase(name);
 } 
 
 Storage.prototype = {
