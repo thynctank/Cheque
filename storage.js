@@ -59,7 +59,7 @@ Storage.prototype = {
     this.run(sql, success, failure);
   },
   // conditions is obj literal with {colName: reqVal, colName: reqVal}
-  read: function(table, conditions, success, failure) {
+  read: function(table, conditions, options, success, failure) {
     var conditionSql = "";
     for(colName in conditions) {
       if(typeof conditions[colName] === "string")
@@ -72,6 +72,17 @@ Storage.prototype = {
     var sql = "SELECT * FROM " + table;
     if(conditions)
       sql += " WHERE " + conditionSql;
+      
+    if(options) {
+      if(options.group)
+        sql += " GROUP BY " + options.group;
+      if(options.order)
+        sql += " ORDER BY " + options.order;
+      if(options.limit)
+        sql += " LIMIT " + options.limit;
+      if(options.offset)
+        sql += " OFFSET " + options.offset;
+    }
 
     this.run(sql, success, failure);
   },
