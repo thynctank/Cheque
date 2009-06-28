@@ -15,8 +15,11 @@ Storage.prototype = {
     var self = this;
     if(success) {
       var oldSuccess = success;
-      success = function(resultSet) {
-        oldSuccess(self._buildRows(resultSet));
+      success = function(resultSet, insertId) {
+        if(insertId)
+          oldSuccess(insertId);
+        else
+          oldSuccess(self._buildRows(resultSet));
       };
     }
     else {
@@ -27,9 +30,12 @@ Storage.prototype = {
     
     console.log(sql);
     this.db.transaction(function(tx) {
-      tx.executeSql(sql, [], 
+      tx.executeSql(sql, [],
         function(tx, resultSet) {
-          success(resultSet);
+          if(sql.search("INSERT|UPDATE") !== -1)
+            success(resultSet, resultSet.insertId);
+          else
+            success(resultSet);
         },
         function(tx, error) {
           if(failure)
@@ -69,7 +75,7 @@ Storage.prototype = {
 
     this.run(sql, success, failure);
   },
-  // success always takes # of rows
+  // success always takes rowCount
   count: function(table, conditions, success, failure) {
     if(success) {
       var oldSuccess = success;
@@ -118,15 +124,32 @@ Storage.prototype = {
   // conditions is an obj literal with {colName: reqVal, colName: reqVal}
   erase: function(table, conditions, success, failure) {
     var conditionSql = "";
-    for(colName in conditions) {
-      if(typeof conditions[colName] === "string")
-        conditionSql += colName + " = " + "'" + conditions[colName] + "' AND ";
-      else
-        conditionSql += colName + " = " + conditions[colName] + " AND ";
+    if(conditions) {
+      for(colName in conditions) {
+        if(typeof conditions[colName] === "string")
+          conditionSql += colName + " = " + "'" + conditions[colName] + "' AND ";
+        else
+          conditionSql += colName + " = " + conditions[colName] + " AND ";
+      }
+      conditionSql = " WHERE " + conditionSql.slice(0, -4);
     }
-    conditionSql = conditionSql.slice(0, -4);
-    var sql = "DELETE FROM " + table + " WHERE " + conditionSql;
+    var sql = "DELETE FROM " + table + conditionSql;
     this.run(sql, success, failure);
   },
-  transact: function(func, success, failure) {}
+  // func takes a tx obj and has a series of tx.executeSql calls and throws an exception at some point if unhappy path is found
+  transact: function(func, success, failure) {
+    var self = this;
+    if(success) {
+      var oldSuccess = success;
+      success = function(resultSet) {
+        oldSuccess(self._buildRows(resultSet));
+      };
+    }
+    else {
+      var success = function(resultSet) {
+        console.log(self._buildRows(resultSet));
+      };
+    }
+    this.db.transaction(func);
+  }
 };
