@@ -32,7 +32,7 @@ Storage.prototype = {
     this.db.transaction(function(tx) {
       tx.executeSql(sql, [],
         function(tx, resultSet) {
-          if(sql.search("INSERT|UPDATE") !== -1)
+          if(sql.search("INSERT") !== -1)
             success(resultSet, resultSet.insertId);
           else
             success(resultSet);
