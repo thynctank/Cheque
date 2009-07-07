@@ -24,7 +24,8 @@ Storage.prototype = {
     }
     else {
       var success = function(resultSet) {
-        console.log(self._buildRows(resultSet));
+        if(resultSet.length > 0)
+          console.log(self._buildRows(resultSet));
       };
     }
     
