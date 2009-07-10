@@ -11,11 +11,8 @@ TransactionAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-	this.controller.setupWidget("backButton", {}, {});
+
 	/* add event handlers to listen to events from widgets */
-	this.controller.listen("backButton", Mojo.Event.tap, function() {
-	  this.controller.stageController.swapScene("account");
-	}.bindAsEventListener(this));
 };
 
 TransactionAssistant.prototype.activate = function(event) {

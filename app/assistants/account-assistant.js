@@ -11,19 +11,13 @@ AccountAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-	this.controller.setupWidget("backButton", {}, {});
+
 	/* add event handlers to listen to events from widgets */
-	this.controller.listen("backButton", Mojo.Event.tap, function() {
-	  this.controller.stageController.swapScene("dashboard");
-	}.bindAsEventListener(this));
 };
 
 AccountAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
- 	$$(".transaction").invoke("observe", "click", function(evt) {
-     this.controller.stageController.swapScene("transaction");
-   }.bind(this), this);
 };
 
 
