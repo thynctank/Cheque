@@ -1,7 +1,7 @@
 [
     {"source": "app\/assistants\/stage-assistant.js"},
     {"source": "lib\/chequelib\/hash.js"},
-    {"source": "storage.js"},
+    {"source": "lib\/syncopate\/storage.js"},
     {
         "scenes": "dashboard",
         "source": "app\/assistants\/dashboard-assistant.js"
