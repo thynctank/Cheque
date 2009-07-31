@@ -1,3 +1,6 @@
 [submodule "lib/chequelib"]
 	path = lib/chequelib
 	url = git@github.com:thynctank/chequelib.git
+[submodule "lib/syncopate"]
+	path = lib/syncopate
+	url = git@github.com:thynctank/Syncopate.git

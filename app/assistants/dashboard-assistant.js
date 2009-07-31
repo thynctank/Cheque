@@ -3,24 +3,52 @@ function DashboardAssistant() {
 	   additional parameters (after the scene name) that were passed to pushScene. The reference
 	   to the scene controller (this.controller) has not be established yet, so any initialization
 	   that needs the scene controller should be done in the setup function below. */
+ 	this.checkbook = new Checkbook();
+ 	window.assistant = this;
 }
 
 DashboardAssistant.prototype.setup = function() {
+  var self = this;
+
 	/* this function is for setup tasks that have to happen when the scene is first created */
 		
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
+	this.accountListModel = {
+	  items: []
+	};
+	this.accountListAttributes = {
+    addItemLabel: "New Account",
+    itemTemplate: "dashboard/account_template",
+    swipeToDelete: true
+  };
+	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
 	
 	/* add event handlers to listen to events from widgets */
+	this.controller.listen("accountList", Mojo.Event.listAdd, function(event) {
+	  this.checkbook.addAccount({name: "Test Account" + new Date().toString(), balance: 23000}, 
+	    function() {
+    	  this.accountListModel.items = this.checkbook.accounts.getValues();
+    	  this.controller.modelChanged(this.accountListModel);
+  	  }.bind(this));
+	}.bind(this));
+	
+	this.controller.listen("accountList", Mojo.Event.listDelete, function(event) {
+	  this.checkbook.removeAccount(event.item.name, function() {
+  	  this.accountListModel.items = this.checkbook.accounts.getValues();
+  	  this.controller.modelChanged(this.accountListModel);
+	  }.bind(this));
+	}.bind(this));
 };
 
 DashboardAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
-	$$(".account").invoke("observe", "click", function(evt) {
-    this.controller.stageController.swapScene("account");
-  }.bind(this), this);
+	setTimeout(function() {
+    this.accountListModel.items = this.checkbook.accounts.getValues();
+    this.controller.modelChanged(this.accountListModel);
+	}.bind(this), 300);
 };
 
 
