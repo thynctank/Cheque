@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Entries Test</title>
+    <script src="syncopate/storage.js" type="text/javascript" charset="utf-8"></script>
+    <script src="chequelib/hash.js" type="text/javascript" charset="utf-8"></script>
+    <script src="chequelib/account.js" type="text/javascript" charset="utf-8"></script>
+    <script src="chequelib/checkbook.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+      th {
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Entries</h1>
+    <div>
+      <input type="button" id="debit" value="Debit $10"/>
+      <input type="button" id="credit" value="Credit $10"/>
+    </div>
+    <table id="entries" border="0" cellspacing="5" cellpadding="5">
+      <thead>
+        <tr><th>Subject</th><th>Amount</th><th>Balance</th><th></th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <script type="text/javascript" charset="utf-8">
+      c = new Checkbook("entries_test", function(c) {
+        c.addOrAccessAccount({name: "Test Bank"}, function(acct) {
+          window.acct = acct;
+          displayEntries();
+        
+          document.getElementById("debit").onclick = function() {
+            acct.debit({subject: "Debit at " + new Date().toString(), amount: 1000}, displayEntries);
+          };
+
+          document.getElementById("credit").onclick = function() {
+            acct.credit({subject: "Credit at " + new Date().toString(), amount: 1000}, displayEntries);
+          };
+        });
+      });
+      
+      function displayEntries() {
+        acct.loadEntries(function() {
+          var rowsMarkup = "";
+          var balance = 0;
+          for(var i = 0, j = acct.entries.length; i < j; i++) {
+            var entry = acct.entries[i];
+            var change = (entry.type == "debit") ? -entry.amount : entry.amount;
+            balance += change;
+            rowsMarkup += "<tr><td>" + entry.subject + "</td>";
+            rowsMarkup += "<td>" + change + "</td>";
+            rowsMarkup += "<td>" + balance + "</td>";
+            rowsMarkup += "<td><a href='#' onclick='acct.eraseEntry(" + i + ", displayEntries)'>Delete</a></td></tr>";
+          }
+          var tbl = document.getElementById("entries");
+          var tbod = tbl.getElementsByTagName("tbody")[0];
+          tbod.innerHTML = rowsMarkup;
+        });
+      }
+    </script>
+  </body>
+</html>

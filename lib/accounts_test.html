@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Accounts Test</title>
+    <script src="syncopate/storage.js" type="text/javascript" charset="utf-8"></script>
+    <script src="chequelib/hash.js" type="text/javascript" charset="utf-8"></script>
+    <script src="chequelib/account.js" type="text/javascript" charset="utf-8"></script>
+    <script src="chequelib/checkbook.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css" media="screen">
+      th {
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Accounts</h1>
+    <div>
+      <input type="button" id="addAccount" value="Add Account"/>
+    </div>
+    <table id="accounts" border="0" cellspacing="5" cellpadding="5">
+      <thead>
+        <tr><th>Name</th><th>Balance</th><th></th></tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <script type="text/javascript" charset="utf-8">
+      c = new Checkbook("accounts_test", function(c) {
+        displayAccounts();
+        
+        document.getElementById("addAccount").onclick = function() {
+          c.addAccount({name: "Account" + new Date().toString(), balance: 1000}, displayAccounts);
+        };
+      });
+      
+      function displayAccounts() {
+        var accounts = c.accounts.getValues();
+        var rowsMarkup = "";
+        for(var i = 0, j = accounts.length; i < j; i++) {
+          var acct = accounts[i];
+          rowsMarkup += "<tr><td>" + acct.name + "</td><td>" + acct.balance + "</td><td><a href='#' onclick='c.removeAccountById(" + acct.id + ", displayAccounts); return false;'>Remove</a></td></tr>";
+        }
+        var tbl = document.getElementById("accounts");
+        var tbod = tbl.getElementsByTagName("tbody")[0];
+        tbod.innerHTML = rowsMarkup;
+      }
+    </script>
+  </body>
+</html>
