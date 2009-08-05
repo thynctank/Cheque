@@ -1,7 +1,5 @@
 [
     {"source": "app\/assistants\/stage-assistant.js"},
-    {"source": "lib\/chequelib\/hash.js"},
-    {"source": "lib\/syncopate\/storage.js"},
     {
         "scenes": "dashboard",
         "source": "app\/assistants\/dashboard-assistant.js"
@@ -11,25 +9,11 @@
         "source": "app\/assistants\/account-assistant.js"
     },
     {
-        "scenes": [
-            "dashboard",
-            "account"
-        ],
-        "source": "lib\/chequelib\/checkbook.js"
-    },
-    {
-        "scenes": [
-          "dashboard",
-          "account"
-        ],
-        "source": "lib\/chequelib\/account.js"
-    },
-    {
         "scenes": "transaction",
         "source": "app\/assistants\/transaction-assistant.js"
     },
     {
-        "scenes": "junk",
-        "source": "app\/assistants\/junk-assistant.js"
+        "scenes": "new-account",
+        "source": "app\/assistants\/new-account-assistant.js"
     }
 ]
