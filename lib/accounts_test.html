@@ -30,7 +30,7 @@
         displayAccounts();
         
         document.getElementById("addAccount").onclick = function() {
-          c.addAccount({name: "Account" + new Date().toString(), balance: 1000}, displayAccounts);
+          c.addOrAccessAccount({name: "Account" + new Date().toString(), balance: 1000}, displayAccounts);
         };
       });
       
