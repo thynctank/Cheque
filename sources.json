@@ -11,15 +11,25 @@
         "source": "app\/assistants\/account-assistant.js"
     },
     {
-        "scenes": ["dashboard", "account"],
+        "scenes": [
+            "dashboard",
+            "account"
+        ],
         "source": "lib\/chequelib\/checkbook.js"
     },
     {
-        "scenes": "account",
+        "scenes": [
+          "dashboard",
+          "account"
+        ],
         "source": "lib\/chequelib\/account.js"
     },
     {
         "scenes": "transaction",
         "source": "app\/assistants\/transaction-assistant.js"
+    },
+    {
+        "scenes": "junk",
+        "source": "app\/assistants\/junk-assistant.js"
     }
 ]
