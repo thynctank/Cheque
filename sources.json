@@ -11,9 +11,5 @@
     {
         "scenes": "transaction",
         "source": "app\/assistants\/transaction-assistant.js"
-    },
-    {
-        "scenes": "new-account",
-        "source": "app\/assistants\/new-account-assistant.js"
     }
 ]
