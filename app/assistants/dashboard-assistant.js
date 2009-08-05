@@ -24,6 +24,10 @@ DashboardAssistant.prototype.setup = function() {
 	    assistant: new AccountDialogAssistant(this)
 	  });
 	}.bind(this));
+	
+	this.controller.listen("accountList", Mojo.Event.listTap, function(event) {
+	  this.controller.stageController.pushScene("account", event.item);
+	}.bind(this));
 
 	this.controller.listen("accountList", Mojo.Event.listDelete, function(event) {
 	  checkbook.removeAccount(event.item.name, function() {
@@ -65,7 +69,7 @@ var AccountDialogAssistant = Class.create({
       value: ""
     });
     
-    this.controller.setupWidget("saveAccountButton", {}, {buttonLabel: "Save"});
+    this.controller.setupWidget("saveAccountButton", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
   },
   activate: function() {
     this.controller.listen("saveAccountButton", Mojo.Event.tap, function(event) {
