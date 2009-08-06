@@ -1,14 +1,13 @@
 function DashboardAssistant() {
 	/* passed all the additional parameters (after the scene name) that were passed to pushScene. Reference
 	   to the scene controller (this.controller) has not be established yet */
-	window.asst = this;
 }
 
 DashboardAssistant.prototype.setup = function() {
   var self = this;
 
   this.accountListModel = {
-	  items: checkbook.accounts.getValues()
+	  items: checkbook.accountsByName()
 	};
 
 	this.accountListAttributes = {
@@ -31,7 +30,7 @@ DashboardAssistant.prototype.setup = function() {
 
 	this.controller.listen("accountList", Mojo.Event.listDelete, function(event) {
 	  checkbook.removeAccount(event.item.name, function() {
-  	  this.accountListModel.items = checkbook.accounts.getValues();
+  	  this.accountListModel.items = checkbook.accountsByName();
   	  this.controller.modelChanged(this.accountListModel);
 	  }.bind(this));
 	}.bind(this));
@@ -79,7 +78,7 @@ var AccountDialogAssistant = Class.create({
         if(this.controller.get("newAccountBalance").mojo.getValue())
           options.balance = this.controller.get("newAccountBalance").mojo.getValue();
         checkbook.addOrAccessAccount(options, function() {
-          this.sceneAssistant.accountListModel.items = checkbook.accounts.getValues();
+          this.sceneAssistant.accountListModel.items = checkbook.accountsByName();
           this.sceneAssistant.controller.modelChanged(this.sceneAssistant.accountListModel);
           this.widget.mojo.close();
         }.bind(this));
