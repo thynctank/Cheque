@@ -64,27 +64,32 @@ var AccountDialogAssistant = Class.create({
       value: ""
     });
     
-    this.controller.setupWidget("newAccountBalance", {}, {
+    this.controller.setupWidget("newAccountBalance", {enterSubmits: true, requiresEnterKey: true, changeOnKeyPress: true, modifierState: Mojo.Widget.numLock}, {
       value: ""
     });
     
     this.controller.setupWidget("saveAccountButton", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
   },
   activate: function() {
-    this.controller.listen("saveAccountButton", Mojo.Event.tap, function(event) {
-      var options = {};
-      if(this.controller.get("newAccountName").mojo.getValue()) {
-        options.name = this.controller.get("newAccountName").mojo.getValue();
-        if(this.controller.get("newAccountBalance").mojo.getValue())
-          options.balance = this.controller.get("newAccountBalance").mojo.getValue();
-        checkbook.addOrAccessAccount(options, function() {
-          this.sceneAssistant.accountListModel.items = checkbook.accountsByName();
-          this.sceneAssistant.controller.modelChanged(this.sceneAssistant.accountListModel);
-          this.widget.mojo.close();
-        }.bind(this));
-      }
-      else
-        this.widget.mojo.close();
+    this.controller.listen("saveAccountButton", Mojo.Event.tap, this.saveNewAccount.bindAsEventListener(this));
+    this.controller.listen("newAccountBalance", Mojo.Event.propertyChange, function(event) {
+      if(event && event.originalEvent && event.originalEvent.keyCode && Mojo.Char.isEnterKey(event.originalEvent.keyCode))
+        this.saveNewAccount();
     }.bind(this));
+  },
+  saveNewAccount: function(event) {
+    var options = {};
+    if(this.controller.get("newAccountName").mojo.getValue()) {
+      options.name = this.controller.get("newAccountName").mojo.getValue();
+      if(this.controller.get("newAccountBalance").mojo.getValue())
+        options.balance = this.controller.get("newAccountBalance").mojo.getValue();
+      checkbook.addOrAccessAccount(options, function() {
+        this.sceneAssistant.accountListModel.items = checkbook.accountsByName();
+        this.sceneAssistant.controller.modelChanged(this.sceneAssistant.accountListModel);
+        this.widget.mojo.close();
+      }.bind(this));
+    }
+    else
+      this.widget.mojo.close();
   }
 });
