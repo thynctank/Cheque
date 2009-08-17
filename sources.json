@@ -9,7 +9,7 @@
         "source": "app\/assistants\/account-assistant.js"
     },
     {
-        "scenes": "transaction",
-        "source": "app\/assistants\/transaction-assistant.js"
+        "scenes": "entry",
+        "source": "app\/assistants\/entry-assistant.js"
     }
 ]

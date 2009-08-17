@@ -13,9 +13,9 @@ AccountAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-	$("accountName").update(this.account.name);
+	$("accountName").update(this.account.name + " Entries");
 	
-	this.balance = 0;
+	this.runningBalance = 0;
 	this.entryListModel = {
 	  items: this.account.entries
 	};
@@ -24,16 +24,21 @@ AccountAssistant.prototype.setup = function() {
     swipeToDelete: true,
     formatters: {amount: function(value, item) {
       debugger;
-      this.balance += value;
-      return this.balance;
+      this.runningBalance += value;
+      return this.runningBalance;
     }.bind(this)}
   };
+
   this.controller.setupWidget("entryList", this.entryListAttributes, this.entryListModel);
-  
   this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {visible: true, items: [
-    {label: "New Entry", icon: "compose", command: "newEntry"}
+    {label: "New Entry", icon: "new", command: "newEntry"}
   ]});
 	/* add event handlers to listen to events from widgets */
+	this.handleListTap = function(event) {
+	  this.controller.stageController.pushScene("entry", event.item);
+	}.bind(this);
+	
+	this.controller.listen("entryList", Mojo.Event.listTap, this.handleListTap);
 };
 
 AccountAssistant.prototype.activate = function(event) {
@@ -50,13 +55,14 @@ AccountAssistant.prototype.deactivate = function(event) {
 AccountAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
+	this.controller.stopListening("entryList", Mojo.Event.listTap, this.handleListTap);
 };
 
 AccountAssistant.prototype.handleCommand = function(event) {
   if (event.type === Mojo.Event.command) {
     switch (event.command) {
       case "newEntry":
-        alert("New Entry");
+        this.controller.stageController.pushScene("entry");
         break;
     }
   }

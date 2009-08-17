@@ -4,12 +4,9 @@ function DashboardAssistant() {
 }
 
 DashboardAssistant.prototype.setup = function() {
-  var self = this;
-
   this.accountListModel = {
 	  items: checkbook.accountsByName()
 	};
-
 	this.accountListAttributes = {
     addItemLabel: "New Account",
     itemTemplate: "dashboard/account_template",
@@ -17,27 +14,28 @@ DashboardAssistant.prototype.setup = function() {
   };
 	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
 
-	this.controller.listen("accountList", Mojo.Event.listAdd, function(event) {
+	this.handleListAdd = function(event) {
 	  this.controller.showDialog({
 	    template: "dashboard/new-account-dialog",
 	    assistant: new AccountDialogAssistant(this)
 	  });
-	}.bind(this));
-	
-	this.controller.listen("accountList", Mojo.Event.listTap, function(event) {
-	  var acct = event.item;
-	  acct.loadEntries(function() {
-	    this.controller.stageController.pushScene("account", acct);  
-	  }.bind(this));
-	}.bind(this));
-
-	this.controller.listen("accountList", Mojo.Event.listDelete, function(event) {
+	}.bind(this);
+	this.handleListTap = function(event) {
+    var acct = event.item;
+    acct.loadEntries(function() {
+      this.controller.stageController.pushScene("account", acct);
+    }.bind(this));
+  }.bind(this);
+  this.handleListDelete = function(event) {
 	  checkbook.removeAccount(event.item.name, function() {
   	  this.accountListModel.items = checkbook.accountsByName();
   	  this.controller.modelChanged(this.accountListModel);
 	  }.bind(this));
-	}.bind(this));
-	
+	}.bind(this);
+  
+	this.controller.listen("accountList", Mojo.Event.listAdd, this.handleListAdd);
+	this.controller.listen("accountList", Mojo.Event.listTap, this.handleListTap);
+	this.controller.listen("accountList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
 DashboardAssistant.prototype.activate = function(event) {
@@ -54,6 +52,9 @@ DashboardAssistant.prototype.deactivate = function(event) {
 DashboardAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
+ 	this.controller.stopListening("accountList", Mojo.Event.listAdd, this.handleListAdd);
+	this.controller.stopListening("accountList", Mojo.Event.listTap, this.handleListTap);
+	this.controller.stopListening("accountList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
 var AccountDialogAssistant = Class.create({
@@ -66,33 +67,36 @@ var AccountDialogAssistant = Class.create({
     this.controller.setupWidget("newAccountName", {}, {
       value: ""
     });
-    
     this.controller.setupWidget("newAccountBalance", {enterSubmits: true, requiresEnterKey: true, changeOnKeyPress: true, modifierState: Mojo.Widget.numLock}, {
       value: ""
     });
-    
     this.controller.setupWidget("saveAccountButton", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
-  },
-  activate: function() {
-    this.controller.listen("saveAccountButton", Mojo.Event.tap, this.saveNewAccount.bindAsEventListener(this));
-    this.controller.listen("newAccountBalance", Mojo.Event.propertyChange, function(event) {
-      if(event && event.originalEvent && event.originalEvent.keyCode && Mojo.Char.isEnterKey(event.originalEvent.keyCode))
-        this.saveNewAccount();
-    }.bind(this));
-  },
-  saveNewAccount: function(event) {
-    var options = {};
-    if(this.controller.get("newAccountName").mojo.getValue()) {
-      options.name = this.controller.get("newAccountName").mojo.getValue();
-      if(this.controller.get("newAccountBalance").mojo.getValue())
-        options.balance = this.controller.get("newAccountBalance").mojo.getValue();
-      checkbook.addOrAccessAccount(options, function() {
-        this.sceneAssistant.accountListModel.items = checkbook.accountsByName();
-        this.sceneAssistant.controller.modelChanged(this.sceneAssistant.accountListModel);
+    
+    this.saveNewAccount = function(event) {
+      var options = {};
+      if(this.controller.get("newAccountName").mojo.getValue()) {
+        options.name = this.controller.get("newAccountName").mojo.getValue();
+        if(this.controller.get("newAccountBalance").mojo.getValue())
+          options.balance = this.controller.get("newAccountBalance").mojo.getValue();
+        checkbook.addOrAccessAccount(options, function() {
+          this.sceneAssistant.accountListModel.items = checkbook.accountsByName();
+          this.sceneAssistant.controller.modelChanged(this.sceneAssistant.accountListModel);
+          this.widget.mojo.close();
+        }.bind(this));
+      }
+      else
         this.widget.mojo.close();
-      }.bind(this));
-    }
-    else
-      this.widget.mojo.close();
+    }.bind(this);
+    this.handleButtonTap = function(event) {
+      if(event && event.originalEvent && event.originalEvent.keyCode && Mojo.Char.isEnterKey(event.originalEvent.keyCode))
+        this.saveNewAccount(event);
+    }.bind(this);
+    
+    this.controller.listen("saveAccountButton", Mojo.Event.tap, this.saveNewAccount);
+    this.controller.listen("newAccountBalance", Mojo.Event.propertyChange, this.handleButtonTap);
+  },
+  cleanup: function() {
+    this.controller.stopListening("saveAccountButton", Mojo.Event.tap, this.saveNewAccount);
+    this.controller.stopListening("newAccountBalance", Mojo.Event.propertyChange, this.handleButtonTap);
   }
 });
