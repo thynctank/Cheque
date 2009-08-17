@@ -13,10 +13,6 @@ DashboardAssistant.prototype.setup = function() {
     itemTemplate: "dashboard/account_template",
     swipeToDelete: true
   };
-  for(var i = 0, j = this.accountListModel.items.length; i < j; i++) {
-    var item = this.accountListModel.items[i];
-    item.balanceString = (item.balance/100).toFixed(2);
-  }
 	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
 
 	this.handleListAdd = function(event) {
@@ -61,9 +57,19 @@ DashboardAssistant.prototype.setup = function() {
 	this.controller.listen("accountList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
+DashboardAssistant.prototype.updateAccounts = function() {
+  this.accountListModel.items = checkbook.accountsByName();
+  for(var i = 0, j = this.accountListModel.items.length; i < j; i++) {
+    var item = this.accountListModel.items[i];
+    item.balanceString = (item.balance/100).toFixed(2);
+  }
+  this.controller.modelChanged(this.accountListModel);
+};
+
 DashboardAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
+	this.updateAccounts();
 };
 
 
@@ -102,12 +108,7 @@ var AccountDialogAssistant = Class.create({
         if(this.controller.get("newAccountBalance").mojo.getValue())
           options.balance = parseFloat(this.controller.get("newAccountBalance").mojo.getValue()) * 100;
         checkbook.addOrAccessAccount(options, function() {
-          this.sceneAssistant.accountListModel.items = checkbook.accountsByName();
-          for(var i = 0, j = this.sceneAssistant.accountListModel.items.length; i < j; i++) {
-            var item = this.sceneAssistant.accountListModel.items[i];
-            item.balanceString = (item.balance/100).toFixed(2);
-          }
-          this.sceneAssistant.controller.modelChanged(this.sceneAssistant.accountListModel);
+          this.sceneAssistant.updateAccounts();
           this.widget.mojo.close();
         }.bind(this));
       }

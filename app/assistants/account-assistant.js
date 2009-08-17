@@ -4,7 +4,6 @@ function AccountAssistant(account) {
 	   to the scene controller (this.controller) has not be established yet, so any initialization
 	   that needs the scene controller should be done in the setup function below. */
 	this.account = account;
-	asst = this;
 }
 
 AccountAssistant.prototype.setup = function() {
@@ -32,8 +31,14 @@ AccountAssistant.prototype.setup = function() {
 	this.handleListTap = function(event) {
 	  this.controller.stageController.pushScene("entry", event.item);
 	}.bind(this);
-	
+	this.handleListDelete = function(event) {
+	  this.account.eraseEntry(event.index, function() {
+	    this.entryListModel.items = this.account.entries;
+	    this.controller.modelChanged(this.entryListModel);
+	  }.bind(this));
+	}.bind(this);
 	this.controller.listen("entryList", Mojo.Event.listTap, this.handleListTap);
+	this.controller.listen("entryList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
 AccountAssistant.prototype.activate = function(event) {
@@ -51,6 +56,7 @@ AccountAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
 	this.controller.stopListening("entryList", Mojo.Event.listTap, this.handleListTap);
+	this.controller.stopListening("entryList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
 AccountAssistant.prototype.handleCommand = function(event) {
