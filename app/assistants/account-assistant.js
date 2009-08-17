@@ -21,12 +21,7 @@ AccountAssistant.prototype.setup = function() {
 	};
 	this.entryListAttributes = {
     itemTemplate: "account/entry_template",
-    swipeToDelete: true,
-    formatters: {amount: function(value, item) {
-      debugger;
-      this.runningBalance += value;
-      return this.runningBalance;
-    }.bind(this)}
+    swipeToDelete: true
   };
 
   this.controller.setupWidget("entryList", this.entryListAttributes, this.entryListModel);
