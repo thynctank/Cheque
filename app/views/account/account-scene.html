@@ -1,9 +1,16 @@
-Entry Info for account <span id="accountName"></span>:
-
-<div id="entryList">
-  Entries go here, taking half the vertical space
+<div id="main" class="palm-hasheader">
+  <div id="accountName" class="palm-header"></div>
+  <div class="palm-group">
+    <div class="palm-group-title">
+      <table border="0" cellspacing="0" cellpadding="0" width="100%">
+        <tr>
+          <td width="50%">Subject</td>
+          <td width="25%" align="right"><span style="margin-right: 20px">Amount</span></td>
+          <td width="25%" align="right"><span style="margin-right: 20px">Balance</span></td>
+        </tr>
+      </table>
+    </div>
+    <div id="entryList" class="palm-list" x-mojo-element="List"></div>
+  </div>  
 </div>
 
-<div id="entryBox">
-  Entry fields go here, including subject drop down w/ new option, amount and add/save button.
-</div>

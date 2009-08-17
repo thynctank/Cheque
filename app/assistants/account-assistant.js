@@ -4,6 +4,7 @@ function AccountAssistant(account) {
 	   to the scene controller (this.controller) has not be established yet, so any initialization
 	   that needs the scene controller should be done in the setup function below. */
 	this.account = account;
+	asst = this;
 }
 
 AccountAssistant.prototype.setup = function() {
@@ -13,7 +14,25 @@ AccountAssistant.prototype.setup = function() {
 	
 	/* setup widgets here */
 	$("accountName").update(this.account.name);
-
+	
+	this.balance = 0;
+	this.entryListModel = {
+	  items: this.account.entries
+	};
+	this.entryListAttributes = {
+    itemTemplate: "account/entry_template",
+    swipeToDelete: true,
+    formatters: {amount: function(value, item) {
+      debugger;
+      this.balance += value;
+      return this.balance;
+    }.bind(this)}
+  };
+  this.controller.setupWidget("entryList", this.entryListAttributes, this.entryListModel);
+  
+  this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {visible: true, items: [
+    {label: "New Entry", icon: "compose", command: "newEntry"}
+  ]});
 	/* add event handlers to listen to events from widgets */
 };
 
@@ -31,4 +50,14 @@ AccountAssistant.prototype.deactivate = function(event) {
 AccountAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
+};
+
+AccountAssistant.prototype.handleCommand = function(event) {
+  if (event.type === Mojo.Event.command) {
+    switch (event.command) {
+      case "newEntry":
+        alert("New Entry");
+        break;
+    }
+  }
 };

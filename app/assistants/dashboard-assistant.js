@@ -25,7 +25,10 @@ DashboardAssistant.prototype.setup = function() {
 	}.bind(this));
 	
 	this.controller.listen("accountList", Mojo.Event.listTap, function(event) {
-	  this.controller.stageController.pushScene("account", event.item);
+	  var acct = event.item;
+	  acct.loadEntries(function() {
+	    this.controller.stageController.pushScene("account", acct);  
+	  }.bind(this));
 	}.bind(this));
 
 	this.controller.listen("accountList", Mojo.Event.listDelete, function(event) {
