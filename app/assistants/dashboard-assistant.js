@@ -1,7 +1,6 @@
 function DashboardAssistant() {
 	/* passed all the additional parameters (after the scene name) that were passed to pushScene. Reference
 	   to the scene controller (this.controller) has not be established yet */
-	   asst = this;
 }
 
 DashboardAssistant.prototype.setup = function() {
@@ -23,27 +22,7 @@ DashboardAssistant.prototype.setup = function() {
 	}.bind(this);
 	this.handleListTap = function(event) {
     var acct = event.item;
-    acct.loadEntries(function() {
-      var j = acct.entries.length;
-      var runningBalance = 0;
-      for(var i = 0; i < j; i++) {
-        var entry = acct.entries[i];
-
-        entry.amountString = (entry.amount/100).toFixed(2);
-        switch(entry.type) {
-          case "credit":
-            runningBalance += entry.amount;
-            break;
-          case "debit":
-            entry.amountString = "-" + entry.amountString;
-            runningBalance -= entry.amount;
-            break;
-        }
-        entry.runningBalance = runningBalance;
-        entry.runningBalanceString = (entry.runningBalance/100).toFixed(2);
-      }
-      this.controller.stageController.pushScene("account", acct);
-    }.bind(this));
+    this.controller.stageController.pushScene("account", acct);
   }.bind(this);
   this.handleListDelete = function(event) {
 	  checkbook.removeAccount(event.item.name, function() {

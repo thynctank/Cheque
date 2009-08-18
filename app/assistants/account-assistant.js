@@ -16,7 +16,7 @@ AccountAssistant.prototype.setup = function() {
 	
 	this.runningBalance = 0;
 	this.entryListModel = {
-	  items: this.account.entries
+	  items: []
 	};
 	this.entryListAttributes = {
     itemTemplate: "account/entry_template",
@@ -29,7 +29,8 @@ AccountAssistant.prototype.setup = function() {
   ]});
 	/* add event handlers to listen to events from widgets */
 	this.handleListTap = function(event) {
-	  this.controller.stageController.pushScene("entry", event.item);
+	  var entry = this.account.entries[event.index];
+	  this.controller.stageController.pushScene("entry", entry);
 	}.bind(this);
 	this.handleListDelete = function(event) {
 	  this.account.eraseEntry(event.index, function() {
@@ -41,9 +42,36 @@ AccountAssistant.prototype.setup = function() {
 	this.controller.listen("entryList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
+AccountAssistant.prototype.updateEntries = function() {
+  this.account.loadEntries(function() {
+    this.entryListModel.items = this.account.entries;
+    var j = this.entryListModel.items.length;
+    var runningBalance = 0;
+    for(var i = 0; i < j; i++) {
+      var entry = this.entryListModel.items[i];
+
+      entry.amountString = (entry.amount/100).toFixed(2);
+      switch(entry.type) {
+        case "credit":
+          runningBalance += entry.amount;
+          break;
+        case "debit":
+          entry.amountString = "-" + entry.amountString;
+          runningBalance -= entry.amount;
+          break;
+      }
+      entry.runningBalance = runningBalance;
+      entry.runningBalanceString = (entry.runningBalance/100).toFixed(2);
+    }
+    
+    this.controller.modelChanged(this.entryListModel);
+  }.bind(this));
+};
+
 AccountAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
+	this.updateEntries();
 };
 
 
@@ -63,7 +91,7 @@ AccountAssistant.prototype.handleCommand = function(event) {
   if (event.type === Mojo.Event.command) {
     switch (event.command) {
       case "newEntry":
-        this.controller.stageController.pushScene("entry");
+        this.controller.stageController.pushScene("entry", {});
         break;
     }
   }

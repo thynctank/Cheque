@@ -3,6 +3,7 @@ function EntryAssistant(entry) {
 	   additional parameters (after the scene name) that were passed to pushScene. The reference
 	   to the scene controller (this.controller) has not be established yet, so any initialization
 	   that needs the scene controller should be done in the setup function below. */
+	this.entry = entry;
 }
 
 EntryAssistant.prototype.setup = function() {
@@ -11,7 +12,13 @@ EntryAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-	
+	var entryState;
+	if(this.entry.id)
+	  entryState = "existing";
+  else
+	  entryState = "new";
+	  
+	this.controller.get("entryState").update(entryState);
 	/* add event handlers to listen to events from widgets */
 };
 
