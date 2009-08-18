@@ -12,11 +12,34 @@ EntryAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
+  this.controller.setupWidget("type", {
+    choices: [
+      {label: "Debit", value: "debit"},
+      {label: "Credit", value: "credit"}
+    ]
+  }, {
+    value: "debit"
+  });
+  this.controller.setupWidget("subject", {}, {value: ""});
+  this.controller.setupWidget("amount", {
+    hintText: "Amount",
+    modifierState: Mojo.Widget.numLock
+  }, {
+    value: ""
+  });
+  this.controller.setupWidget("date", {}, {date: new Date()});
+  this.controller.setupWidget("memo", {hintText: "Memo"}, {value: ""});
+  this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {
+    buttonLabel: "Save"
+  });
+
 	var entryState;
-	if(this.entry.id)
-	  entryState = "existing";
+	if(this.entry.id) {
+	  entryState = "Edit";
+    // set widget values for existing entry
+	}
   else
-	  entryState = "new";
+	  entryState = "New";
 	  
 	this.controller.get("entryState").update(entryState);
 	/* add event handlers to listen to events from widgets */
