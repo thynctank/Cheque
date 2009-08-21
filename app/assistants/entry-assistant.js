@@ -22,13 +22,12 @@ EntryAssistant.prototype.setup = function() {
   });
   this.controller.setupWidget("subject", {}, {value: ""});
   this.controller.setupWidget("amount", {
-    hintText: "Amount",
     modifierState: Mojo.Widget.numLock
   }, {
     value: ""
   });
-  this.controller.setupWidget("date", {}, {date: new Date()});
-  this.controller.setupWidget("memo", {hintText: "Memo"}, {value: ""});
+  this.controller.setupWidget("date", {labelPlacement: Mojo.Widget.labelPlacementRight}, {date: new Date()});
+  this.controller.setupWidget("memo", {}, {value: ""});
   this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {
     buttonLabel: "Save"
   });

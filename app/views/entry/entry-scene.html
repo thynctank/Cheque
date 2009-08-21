@@ -1,9 +1,78 @@
 <div id="main" class="palm-hasheader">
-  <div class="palm-header"><span id="entryState"></span> Entry</div>
-  <div id="type" x-mojo-element="ListSelector"></div>
-  <div id="subject" x-mojo-element="TextField"></div>
-  <div id="amount" x-mojo-element="TextField"></div>
-  <div id="date" x-mojo-element="DatePicker"></div>
-  <div id="memo" x-mojo-element="TextField"></div>
-  <div id="save" x-mojo-element="Button"></div>
+  <div class="palm-header"><span id="entryState"></span>Entry</div>
+
+  <div class="palm-group unlabeled">
+		<div class="palm-list">
+		  
+		  <div class="palm-row first">
+				<div class="palm-row-wrapper">
+          <div id="date" x-mojo-element="DatePicker"></div>
+				</div>
+			</div>
+
+			<div class="palm-row">
+				<div class="palm-row-wrapper">
+					<div class="textfield-group" x-mojo-focus-highlight="true">
+						<div class="title">
+							<div class="label">
+								Type
+							</div>
+						  <div id="type" x-mojo-element="ListSelector"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="palm-row">
+				<div class="palm-row-wrapper">
+					<div class="textfield-group" x-mojo-focus-highlight="true">
+						<div class="title">
+							<div class="label">
+								Subject
+							</div>
+              <div id="subject" x-mojo-element="TextField"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="palm-row">
+				<div class="palm-row-wrapper">
+					<div class="textfield-group" x-mojo-focus-highlight="true">
+						<div class="title">
+							<div class="label">
+								Amount
+							</div>
+              <div id="amount" x-mojo-element="TextField"></div>
+						</div>
+					</div>
+				</div>
+			</div>			
+
+			<div class="palm-row">
+				<div class="palm-row-wrapper">
+					<div class="textfield-group" x-mojo-focus-highlight="true">
+						<div class="title">
+							<div class="label">
+								Memo
+							</div>
+              <div id="memo" x-mojo-element="TextField"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="palm-row last">
+				<div class="palm-row-wrapper">
+					<div class="textfield-group" x-mojo-focus-highlight="true">
+						<div class="title">
+              <div id="save" x-mojo-element="Button"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
 </div>
