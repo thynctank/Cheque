@@ -40,7 +40,7 @@ DashboardAssistant.prototype.updateAccounts = function() {
   this.accountListModel.items = checkbook.accountsByName();
   for(var i = 0, j = this.accountListModel.items.length; i < j; i++) {
     var item = this.accountListModel.items[i];
-    item.balanceString = (item.balance/100).toFixed(2);
+    item.balanceString = item.balance.toFinancialString();
   }
   this.controller.modelChanged(this.accountListModel);
 };
@@ -85,7 +85,7 @@ var AccountDialogAssistant = Class.create({
       if(this.controller.get("newAccountName").mojo.getValue()) {
         options.name = this.controller.get("newAccountName").mojo.getValue();
         if(this.controller.get("newAccountBalance").mojo.getValue())
-          options.balance = parseFloat(this.controller.get("newAccountBalance").mojo.getValue()) * 100;
+          options.balance = this.controller.get("newAccountBalance").mojo.getValue().toCents();
         checkbook.addOrAccessAccount(options, function() {
           this.sceneAssistant.updateAccounts();
           this.widget.mojo.close();

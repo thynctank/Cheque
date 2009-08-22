@@ -50,7 +50,7 @@ AccountAssistant.prototype.updateEntries = function() {
     for(var i = 0; i < j; i++) {
       var entry = this.entryListModel.items[i];
 
-      entry.amountString = (entry.amount/100).toFixed(2);
+      entry.amountString = entry.amount.toFinancialString();
       switch(entry.type) {
         case "credit":
           runningBalance += entry.amount;
@@ -61,7 +61,7 @@ AccountAssistant.prototype.updateEntries = function() {
           break;
       }
       entry.runningBalance = runningBalance;
-      entry.runningBalanceString = (entry.runningBalance/100).toFixed(2);
+      entry.runningBalanceString = entry.runningBalance.toFinancialString();
     }
     
     this.controller.modelChanged(this.entryListModel);

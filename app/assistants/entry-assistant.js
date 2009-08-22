@@ -16,21 +16,16 @@ EntryAssistant.prototype.setup = function() {
     choices: [
       {label: "Debit", value: "debit"},
       {label: "Credit", value: "credit"}
-    ]
+    ],
+    label: "Type"
   }, {
-    value: "debit"
+    value: this.entry.type || "debit"
   });
-  this.controller.setupWidget("subject", {}, {value: ""});
-  this.controller.setupWidget("amount", {
-    modifierState: Mojo.Widget.numLock
-  }, {
-    value: ""
-  });
-  this.controller.setupWidget("date", {labelPlacement: Mojo.Widget.labelPlacementRight}, {date: new Date()});
-  this.controller.setupWidget("memo", {}, {value: ""});
-  this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {
-    buttonLabel: "Save"
-  });
+  this.controller.setupWidget("subject", {focus: true}, {value: this.entry.subject || ""});
+  this.controller.setupWidget("amount", {modifierState: Mojo.Widget.numLock}, {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
+  this.controller.setupWidget("date", {}, {date: new Date()});
+  this.controller.setupWidget("memo", {}, {value: this.entry.memo || ""});
+  this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
 
 	var entryState;
 	if(this.entry.id) {
