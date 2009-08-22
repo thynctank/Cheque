@@ -24,7 +24,7 @@ EntryAssistant.prototype.setup = function() {
   });
   this.controller.setupWidget("subject", {focus: true}, this.subjectModel = {value: this.entry.subject || ""});
   this.controller.setupWidget("amount", {modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
-  this.controller.setupWidget("date", {}, this.dateModel = {date: new Date()});
+  this.controller.setupWidget("date", {}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
   this.controller.setupWidget("memo", {}, this.memoModel = {value: this.entry.memo || ""});
   this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
 
