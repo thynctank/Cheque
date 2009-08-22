@@ -35,8 +35,7 @@ AccountAssistant.prototype.setup = function() {
 	}.bind(this);
 	this.handleListDelete = function(event) {
 	  this.account.eraseEntry(event.index, function() {
-	    this.entryListModel.items = this.account.entries;
-	    this.controller.modelChanged(this.entryListModel);
+	    this.updateEntries();
 	  }.bind(this));
 	}.bind(this);
 	this.controller.listen("entryList", Mojo.Event.listTap, this.handleListTap);
@@ -46,6 +45,7 @@ AccountAssistant.prototype.setup = function() {
 AccountAssistant.prototype.updateEntries = function() {
   this.account.loadEntries(function() {
     var runningBalance = 0;
+    this.entryListModel.items = [];
     for(var i = 0, j = this.account.entries.length; i < j; i++) {
       this.entryListModel.items[i] = Object.clone(this.account.entries[i]);
       var entry = this.entryListModel.items[i];
