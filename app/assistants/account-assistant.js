@@ -4,6 +4,7 @@ function AccountAssistant(account) {
 	   to the scene controller (this.controller) has not be established yet, so any initialization
 	   that needs the scene controller should be done in the setup function below. */
 	this.account = account;
+	asst = this;
 }
 
 AccountAssistant.prototype.setup = function() {
@@ -30,7 +31,7 @@ AccountAssistant.prototype.setup = function() {
 	/* add event handlers to listen to events from widgets */
 	this.handleListTap = function(event) {
 	  var entry = this.account.entries[event.index];
-	  this.controller.stageController.pushScene("entry", entry);
+	  this.controller.stageController.pushScene("entry", entry, this.account);
 	}.bind(this);
 	this.handleListDelete = function(event) {
 	  this.account.eraseEntry(event.index, function() {
@@ -44,12 +45,10 @@ AccountAssistant.prototype.setup = function() {
 
 AccountAssistant.prototype.updateEntries = function() {
   this.account.loadEntries(function() {
-    this.entryListModel.items = this.account.entries;
-    var j = this.entryListModel.items.length;
     var runningBalance = 0;
-    for(var i = 0; i < j; i++) {
+    for(var i = 0, j = this.account.entries.length; i < j; i++) {
+      this.entryListModel.items[i] = Object.clone(this.account.entries[i]);
       var entry = this.entryListModel.items[i];
-
       entry.amountString = entry.amount.toFinancialString();
       switch(entry.type) {
         case "credit":
@@ -71,7 +70,7 @@ AccountAssistant.prototype.updateEntries = function() {
 AccountAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
-	this.updateEntries();
+  this.updateEntries();
 };
 
 
@@ -91,7 +90,7 @@ AccountAssistant.prototype.handleCommand = function(event) {
   if (event.type === Mojo.Event.command) {
     switch (event.command) {
       case "newEntry":
-        this.controller.stageController.pushScene("entry", {});
+        this.controller.stageController.pushScene("entry", {}, this.account);
         break;
     }
   }
