@@ -30,6 +30,7 @@
         displayAccounts();
         
         document.getElementById("addAccount").onclick = function() {
+          this.style.visibility = "hidden";
           c.addOrAccessAccount({name: "Account" + new Date().toString(), balance: 1000}, displayAccounts);
         };
       });
@@ -44,6 +45,8 @@
         var tbl = document.getElementById("accounts");
         var tbod = tbl.getElementsByTagName("tbody")[0];
         tbod.innerHTML = rowsMarkup;
+        var button = document.getElementById("addAccount");
+        button.style.visibility = "visible";
       }
     </script>
   </body>
