@@ -1,3 +1,43 @@
 #date .label {
   display: none;
 }
+
+.accountLeft {
+  float: left;
+  width: 60%;
+}
+
+.accountRight {
+  float: right;
+  width: 40%;
+  text-align: right;
+}
+
+.entryLeft {
+  float: left;
+  width: 30%;
+}
+
+.entryRight {
+  float: right;
+  width: 70%;
+  text-align: right;
+}
+
+.entryRight span {
+  width: 35%;
+  display: block;
+  float: right;
+  margin-left: 4px;
+}
+
+.entryRightTitle {
+  float: right;
+  width: 70%;
+}
+
+.entryRightTitle span {
+  width: 35%;
+  display: block;
+  float: right;
+}

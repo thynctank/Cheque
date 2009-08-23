@@ -75,7 +75,7 @@ var AccountDialogAssistant = Class.create({
     this.controller.setupWidget("newAccountName", {}, {
       value: ""
     });
-    this.controller.setupWidget("newAccountBalance", {requiresEnterKey: true, charsAllowed: numericOnly, modifierState: Mojo.Widget.numLock}, {
+    this.controller.setupWidget("newAccountBalance", {requiresEnterKey: true, charsAllow: numericOnly, modifierState: Mojo.Widget.numLock}, {
       value: ""
     });
     this.controller.setupWidget("saveAccountButton", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
