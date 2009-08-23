@@ -1,43 +1,43 @@
 #date .label {
-  display: none;
-}
+  display: none; }
+
+#accountList *, #entryList * {
+  font-size: 16px; }
 
 .accountLeft {
   float: left;
-  width: 60%;
-}
+  width: 50%; }
 
-.accountRight {
+.accountRight, .accountRightTitle {
   float: right;
-  width: 40%;
-  text-align: right;
-}
+  width: 50%;
+  text-align: right; }
 
 .entryLeft {
   float: left;
-  width: 30%;
-}
+  width: 40%; }
 
 .entryRight {
   float: right;
-  width: 70%;
-  text-align: right;
-}
-
-.entryRight span {
-  width: 35%;
-  display: block;
-  float: right;
-  margin-left: 4px;
-}
+  width: 60%;
+  text-align: right; }
+  .entryRight span {
+    width: 50%;
+    display: block;
+    float: right; }
 
 .entryRightTitle {
   float: right;
-  width: 70%;
-}
+  width: 60%;
+  text-align: right; }
+  .entryRightTitle div {
+    width: 50%;
+    display: block;
+    float: left; }
+    .entryRightTitle div span {
+      padding-right: 10px; }
+  .entryRightTitle div.last span {
+    padding-right: 16px; }
 
-.entryRightTitle span {
-  width: 35%;
-  display: block;
-  float: right;
-}
+.accountRightTitle span {
+  margin-right: 16px; }
