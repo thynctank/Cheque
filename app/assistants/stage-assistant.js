@@ -13,7 +13,7 @@ numericOnly = function(entry) {
   var parsedChar = parseInt(character, 10);
   if(typeof parsedChar === "number" && !isNaN(parsedChar))
     return true;
-  else if(character === ".")
+  else if(character === "." || character === "-")
     return true;
   else
     return false;
