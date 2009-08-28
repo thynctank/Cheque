@@ -21,6 +21,7 @@ numericOnly = function(entry) {
 
 StageAssistant.prototype.setup = function() {
   checkbook = new Checkbook("cheque", function() {
+    // checkbook.storage.logging = true;
   	this.controller.pushScene("dashboard");
   }.bind(this));
 };
