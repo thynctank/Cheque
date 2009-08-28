@@ -9,11 +9,17 @@ String.prototype.toCents = function() {
   return parseFloat(this.valueOf()) * 100;
 };
 numericOnly = function(entry) {
+  return numericFilter(entry, true);
+};
+positiveNumericOnly = function(entry) {
+  return numericFilter(entry);
+};
+numericFilter = function(entry, negativeAllowed) {
   var character = String.fromCharCode(entry);
   var parsedChar = parseInt(character, 10);
   if(typeof parsedChar === "number" && !isNaN(parsedChar))
     return true;
-  else if(character === "." || character === "-")
+  else if(character === "." || (negativeAllowed && character === "-"))
     return true;
   else
     return false;
