@@ -41,3 +41,12 @@
 
 .accountRightTitle span {
   margin-right: 16px; }
+
+#mojo-scene-entry .palm-popup-content .palm-row {
+  min-height: 20px; }
+  #mojo-scene-entry .palm-popup-content .palm-row .popup-item-checkmark {
+    margin: 2px 10px 0 0; }
+  #mojo-scene-entry .palm-popup-content .palm-row .title {
+    padding: 10px;
+    font-size: 16px;
+    line-height: 16px; }

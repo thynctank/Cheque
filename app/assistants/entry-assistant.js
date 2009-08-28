@@ -5,6 +5,7 @@ function EntryAssistant(entry, account) {
 	   that needs the scene controller should be done in the setup function below. */
 	this.entry = entry;
 	this.account = account;
+	asst = this;
 }
 
 EntryAssistant.prototype.setup = function() {
@@ -13,7 +14,7 @@ EntryAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-  this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || "Card Swiped"});
+  this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || 1});
   this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
   this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
   this.controller.setupWidget("date", {}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
@@ -31,12 +32,17 @@ EntryAssistant.prototype.setup = function() {
 	this.controller.get("entryState").update(entryState);
 	/* add event handlers to listen to events from widgets */
 	
-	this.entry.type = this.entry.type || "debit";
-	
 	this.handleSave = function() {
+	  if(isNaN(parseInt(this.controller.get("amount").mojo.getValue(), 10))) {
+	    Mojo.Controller.errorDialog("Entry requires amount!");
+	    this.controller.get("save").mojo.deactivate();
+	    this.controller.get("amount").mojo.focus();
+	    return;
+	  }
 	  this.entry.category = this.categoryModel.value;
-	  this.entry.subject = this.subjectModel.value || this.categoryModel.value;
-	  this.entry.amount = this.amountModel.value.toCents();
+	  this.entry.subject = this.controller.get("subject").mojo.getValue() || this.categoryModel.choices[this.categoryModel.value].label;
+	  this.entry.type = this.categoryModel.choices[this.categoryModel.value].type;
+	  this.entry.amount = this.controller.get("amount").mojo.getValue().toCents();
 	  this.entry.date = this.dateModel.date.getTime();
 	  this.entry.memo = this.memoModel.value;
 	  this.account.writeEntry(this.entry, function() {
@@ -44,25 +50,18 @@ EntryAssistant.prototype.setup = function() {
 	  }.bind(this));
 	}.bind(this);
 	
-	this.handleCategoryChane = function(event) {
-	  console.log(event);
-	  this.entry.type = event.model.type;
-	}.bind(this);
-	
 	this.controller.listen("save", Mojo.Event.tap, this.handleSave);
-	this.controller.listen("category", Mojo.Event.propertyChange, this.handleCategoryChane);
 };
 
 EntryAssistant.prototype.activate = function(event) {
   this.categoryModel.choices = [];
-  var self = this;
   checkbook.storage.read("categories", null, null, function(rows) {
     for(var i = 0, j = rows.length; i < j; i++) {
       row = rows[i];
-      self.categoryModel.choices.push({label: row.name, value: row.name, type: row.type});
+      this.categoryModel.choices.push({label: row.name, value: i, type: row.type});
     }
-    self.controller.modelChanged(self.categoryModel);
-  });
+    this.controller.modelChanged(this.categoryModel);
+  }.bind(this));
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
 };
@@ -76,5 +75,4 @@ EntryAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
 	this.controller.stopListening("save", Mojo.Event.tap, this.handleSave);
-	this.controller.stopListening("category", Mojo.Event.propertyChange, this.handleCategoryChane);
 };
