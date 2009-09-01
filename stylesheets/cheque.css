@@ -59,10 +59,12 @@
 
 #totalLine {
   width: 100%; }
-  #totalLine * {
+  #totalLine .palm-row {
     font-size: 16px; }
-  #totalLine span {
-    width: 50%; }
+
+#total {
+  font-weight: bold; }
 
 .wrapper {
-  padding: 5px 24px 5px 23px; }
+  padding: 5px 24px 5px 23px;
+  clear: both; }

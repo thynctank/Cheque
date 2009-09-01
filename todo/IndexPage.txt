@@ -1,8 +1,6 @@
 Scenes
 ======
 
-  DashboardScene - startup
-
   AccountManagementScene - manage accounts
   
   AccountDetailScene - acct notes, #s

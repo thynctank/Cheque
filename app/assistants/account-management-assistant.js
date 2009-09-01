@@ -1,6 +1,8 @@
-function AccountManagementAssistant() {
+function AccountManagementAssistant(options) {
 	/* passed all the additional parameters (after the scene name) that were passed to pushScene. Reference
 	   to the scene controller (this.controller) has not be established yet */
+	if(options && options.newAccount)
+	  this.newAccount = true;
 }
 
 AccountManagementAssistant.prototype.setup = function() {
@@ -22,6 +24,7 @@ AccountManagementAssistant.prototype.setup = function() {
 	}.bind(this);
 	this.handleListTap = function(event) {
     var acct = event.item;
+    this.controller.stageController.popScenesTo("dashboard");
     this.controller.stageController.pushScene("account", acct);
   }.bind(this);
   this.handleListDelete = function(event) {
@@ -49,6 +52,8 @@ AccountManagementAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
 	this.updateAccounts();
+	if(this.newAccount)
+	  this.handleListAdd();
 };
 
 

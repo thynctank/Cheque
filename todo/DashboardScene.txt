@@ -1,5 +1,0 @@
-If no accounts, prompt user for first account creation
-
-Balance across all accounts
-
-Menu to access AccountManagementScene
