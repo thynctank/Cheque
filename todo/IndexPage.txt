@@ -1,13 +1,13 @@
 Scenes
 ======
 
+  EntryScene - entry details
+  
   AccountManagementScene - manage accounts
   
   AccountDetailScene - acct notes, #s
   
   AccountScene - list of entries for acct, actual/cleared balance
-  
-  EntryScene - entry details
   
   TransferScene - like EntryScene for transfers
   
@@ -18,15 +18,19 @@ Non-Scene Stuff
 
   CategoriesWorking
 
-  AppIcon
-  
-  AppLogo
-  
   InAppIcons
   
   TransfersUsingTransactions
   
   HelpText
+
+  AboutDialog
+  
+  HelpDialog  
+
+  AppIcon
+  
+  AppLogo
   
   WebSite
   
@@ -34,6 +38,3 @@ Non-Scene Stuff
   
   GoogleDocsExport
   
-  AboutDialog
-  
-  HelpDialog

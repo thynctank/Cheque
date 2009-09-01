@@ -2,4 +2,6 @@ Add checkbox for "cleared"
 
 Fix date alignment
 
+Fix category
+
 Help Text
