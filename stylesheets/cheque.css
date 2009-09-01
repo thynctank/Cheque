@@ -1,3 +1,9 @@
+.floatRight {
+  float: right; }
+
+.floatLeft {
+  float: left; }
+
 #date .label {
   display: none; }
 
@@ -50,3 +56,13 @@
     padding: 10px;
     font-size: 16px;
     line-height: 16px; }
+
+#totalLine {
+  width: 100%; }
+  #totalLine * {
+    font-size: 16px; }
+  #totalLine span {
+    width: 50%; }
+
+.wrapper {
+  padding: 5px 24px 5px 23px; }

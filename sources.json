@@ -1,15 +1,19 @@
 [
     {"source": "app\/assistants\/stage-assistant.js"},
     {
-        "scenes": "dashboard",
-        "source": "app\/assistants\/dashboard-assistant.js"
+        "source": "app\/assistants\/dashboard-assistant.js",
+        "scenes": "dashboard"
     },
     {
-        "scenes": "account",
-        "source": "app\/assistants\/account-assistant.js"
+        "source": "app\/assistants\/account-assistant.js",
+        "scenes": "account"
     },
     {
-        "scenes": "entry",
-        "source": "app\/assistants\/entry-assistant.js"
+        "source": "app\/assistants\/entry-assistant.js",
+        "scenes": "entry"
+    },
+    {
+        "source": "app\/assistants\/account-management-assistant.js",
+        "scenes": "account-management"
     }
 ]

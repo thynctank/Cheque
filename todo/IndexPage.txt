@@ -35,3 +35,7 @@ Non-Scene Stuff
   RecurringBillReminders
   
   GoogleDocsExport
+  
+  AboutDialog
+  
+  HelpDialog

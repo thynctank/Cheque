@@ -8,41 +8,57 @@ DashboardAssistant.prototype.setup = function() {
 	  items: checkbook.accountsByName()
 	};
 	this.accountListAttributes = {
-    addItemLabel: "New Account",
-    itemTemplate: "dashboard/account_template",
-    swipeToDelete: true
+    itemTemplate: "dashboard/account_template"
   };
+  this.menuAttributes = {
+    omitDefaultItems: true
+  };
+  this.menuModel = {
+    visible: true,
+    items: [ 
+      {label: "About", command: "about"},
+      {label: "Manage Accounts", command: "accounts" },
+      {label: "Help", command: "help" }
+    ]
+  };
+  
 	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
+	this.controller.setupWidget(Mojo.Menu.appMenu, this.menuAttributes, this.menuModel);
+  this.controller.setupWidget("firstAccountButton", {}, {label: "Set up your first account"});
 
-	this.handleListAdd = function(event) {
-	  this.controller.showDialog({
-	    template: "dashboard/new-account-dialog",
-	    assistant: new AccountDialogAssistant(this)
-	  });
-	}.bind(this);
 	this.handleListTap = function(event) {
     var acct = event.item;
     this.controller.stageController.pushScene("account", acct);
   }.bind(this);
-  this.handleListDelete = function(event) {
-	  checkbook.removeAccount(event.item.name, function() {
-  	  this.accountListModel.items = checkbook.accountsByName();
-  	  this.controller.modelChanged(this.accountListModel);
-	  }.bind(this));
-	}.bind(this);
+  this.handleFirstAccountTap = function(event) {
+    this.controller.stageController.pushScene("account-management", {newAccount: true});
+  }.bind(this);
   
-	this.controller.listen("accountList", Mojo.Event.listAdd, this.handleListAdd);
 	this.controller.listen("accountList", Mojo.Event.listTap, this.handleListTap);
-	this.controller.listen("accountList", Mojo.Event.listDelete, this.handleListDelete);
+  this.controller.listen("firstAccountButton", Mojo.Event.tap, this.handleFirstAccountTap);
 };
+
 
 DashboardAssistant.prototype.updateAccounts = function() {
   this.accountListModel.items = checkbook.accountsByName();
-  for(var i = 0, j = this.accountListModel.items.length; i < j; i++) {
-    var item = this.accountListModel.items[i];
-    item.balanceString = item.balance.toFinancialString();
+  if(this.accountListModel.items.length === 0) {
+    this.controller.get("totalLine").hide();
+    this.controller.get("accountListContainer").hide();
+    this.controller.get("firstTimeBox").show();
   }
-  this.controller.modelChanged(this.accountListModel);
+  else {
+    this.controller.get("firstTimeBox").hide();
+    this.controller.get("accountListContainer").show();
+    this.controller.get("totalLine").show();
+    var cummulativeBalance = 0;
+    for(var i = 0, j = this.accountListModel.items.length; i < j; i++) {
+      var item = this.accountListModel.items[i];
+      item.balanceString = item.balance.toFinancialString();
+      cummulativeBalance += item.balance;
+    }
+    this.controller.modelChanged(this.accountListModel);
+    this.controller.get("total").update(cummulativeBalance.toFinancialString());
+  }
 };
 
 DashboardAssistant.prototype.activate = function(event) {
@@ -50,7 +66,6 @@ DashboardAssistant.prototype.activate = function(event) {
 	   example, key handlers that are observing the document */
 	this.updateAccounts();
 };
-
 
 DashboardAssistant.prototype.deactivate = function(event) {
 	/* remove any event handlers you added in activate and do any other cleanup that should happen before
@@ -60,50 +75,6 @@ DashboardAssistant.prototype.deactivate = function(event) {
 DashboardAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
- 	this.controller.stopListening("accountList", Mojo.Event.listAdd, this.handleListAdd);
 	this.controller.stopListening("accountList", Mojo.Event.listTap, this.handleListTap);
-	this.controller.stopListening("accountList", Mojo.Event.listDelete, this.handleListDelete);
+  // this.controller.stopListening("firstAccountButton", Mojo.Event.tap, this.handleFirstAccountTap);
 };
-
-var AccountDialogAssistant = Class.create({
-  initialize: function(sceneAssistant) {
-    this.sceneAssistant = sceneAssistant;
-    this.controller = sceneAssistant.controller;
-  },
-  setup: function(widget) {
-    this.widget = widget;
-    this.controller.setupWidget("newAccountName", {}, {
-      value: ""
-    });
-    this.controller.setupWidget("newAccountBalance", {requiresEnterKey: true, charsAllow: numericOnly, modifierState: Mojo.Widget.numLock}, {
-      value: ""
-    });
-    this.controller.setupWidget("saveAccountButton", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
-    
-    this.saveNewAccount = function() {
-      var options = {};
-      if(this.controller.get("newAccountName").mojo.getValue()) {
-        options.name = this.controller.get("newAccountName").mojo.getValue();
-        if(this.controller.get("newAccountBalance").mojo.getValue())
-          options.balance = this.controller.get("newAccountBalance").mojo.getValue().toCents();
-        checkbook.addOrAccessAccount(options, function() {
-          this.sceneAssistant.updateAccounts();
-          this.widget.mojo.close();
-        }.bind(this));
-      }
-      else
-        this.widget.mojo.close();
-    }.bind(this);
-    this.handleEnter = function(event) {
-      if(event && event.originalEvent && event.originalEvent.keyCode && Mojo.Char.isEnterKey(event.originalEvent.keyCode))
-        this.saveNewAccount(event);
-    }.bind(this);
-    
-    this.controller.listen("saveAccountButton", Mojo.Event.tap, this.saveNewAccount);
-    this.controller.listen("newAccountBalance", Mojo.Event.propertyChange, this.handleEnter);
-  },
-  cleanup: function() {
-    this.controller.stopListening("saveAccountButton", Mojo.Event.tap, this.saveNewAccount);
-    this.controller.stopListening("newAccountBalance", Mojo.Event.propertyChange, this.handleEnter);
-  }
-});

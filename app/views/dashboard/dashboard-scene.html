@@ -1,6 +1,7 @@
 <div id="main" class="palm-hasheader">
-  <div class="palm-header">Account List</div>
-  <div class="palm-group">
+  <div class="palm-header">Cheque</div>
+
+  <div id="accountListContainer" class="palm-group">
     <div class="palm-group-title">
       <div class="title">
         <div class="accountLeft">Account Name</div>
@@ -10,5 +11,19 @@
       </div>
     </div>
     <div id="accountList" class="palm-list" x-mojo-element="List"></div>
+    
   </div>
+
+  <div id="firstTimeBox" class="wrapper">
+    It looks like you don't have any accounts set up!
+    <div id="firstAccountButton" x-mojo-element="Button"></div>
+  </div>
+
+  <div id="totalLine">
+    <div class="wrapper">
+      <div class="floatLeft">Total:</div>
+      <div id="total" class="floatRight"></div>
+    </div>
+  </div>
+
 </div>

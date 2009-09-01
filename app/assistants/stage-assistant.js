@@ -31,3 +31,18 @@ StageAssistant.prototype.setup = function() {
   	this.controller.pushScene("dashboard");
   }.bind(this));
 };
+
+StageAssistant.prototype.handleCommand = function(event) {
+  this.controller = Mojo.Controller.stageController;
+  if(event.type === Mojo.Event.command) {
+    switch(event.command) {
+      case "about":
+        break;
+      case "accounts":
+        this.controller.pushScene("account-management");
+        break;
+      case "help":
+        break;
+    }
+  }
+};

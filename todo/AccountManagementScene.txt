@@ -1,5 +1,3 @@
-Make it!
-
 Add info icon to account rows, leads to AccountDetailScene
 
 No balance info, just name/type if present
