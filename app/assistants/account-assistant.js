@@ -46,24 +46,36 @@ AccountAssistant.prototype.updateEntries = function() {
   this.account.loadEntries(function() {
     var runningBalance = 0;
     this.entryListModel.items = [];
-    for(var i = 0, j = this.account.entries.length; i < j; i++) {
-      this.entryListModel.items[i] = Object.clone(this.account.entries[i]);
-      var entry = this.entryListModel.items[i];
-      entry.amountString = entry.amount.toFinancialString();
-      switch(entry.type) {
-        case "credit":
-          runningBalance += entry.amount;
-          break;
-        case "debit":
-          entry.amountString = "-" + entry.amountString;
-          runningBalance -= entry.amount;
-          break;
+    if(this.account.entries.length === 0) {
+      this.controller.get("totalLine").hide();
+      this.controller.get("accountListContainer").hide();
+      this.controller.get("firstTimeBox").show();
+    }
+    else {
+      this.controller.get("firstTimeBox").hide();
+      this.controller.get("accountListContainer").show();
+      this.controller.get("totalLine").show();
+      var runningBalance = 0;
+      for(var i = 0, j = this.account.entries.length; i < j; i++) {
+        this.entryListModel.items[i] = Object.clone(this.account.entries[i]);
+        var entry = this.entryListModel.items[i];
+        entry.amountString = entry.amount.toFinancialString();
+        switch(entry.type) {
+          case "credit":
+            runningBalance += entry.amount;
+            break;
+          case "debit":
+            entry.amountString = "-" + entry.amountString;
+            runningBalance -= entry.amount;
+            break;
+        }
+        entry.runningBalance = runningBalance;
+        entry.runningBalanceString = entry.runningBalance.toFinancialString();
       }
-      entry.runningBalance = runningBalance;
-      entry.runningBalanceString = entry.runningBalance.toFinancialString();
+      this.controller.modelChanged(this.entryListModel);
+      this.controller.get("total").update(runningBalance.toFinancialString());
     }
     
-    this.controller.modelChanged(this.entryListModel);
   }.bind(this));
 };
 

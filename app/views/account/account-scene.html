@@ -1,6 +1,7 @@
 <div id="main" class="palm-hasheader">
   <div id="accountName" class="palm-header"></div>
-  <div class="palm-group">
+
+  <div id="entryListContainer" class="palm-group">
     <div class="palm-group-title">
       <div class="entryLeft">Subject</div>
       <div class="entryRightTitle">
@@ -10,5 +11,22 @@
     </div>
     <div id="entryList" class="palm-list" x-mojo-element="List"></div>
   </div>  
+  
+  <div id="firstTimeBox" class="wrapper">
+    To add entries, click the button below
+    <div id="firstAccountButton" x-mojo-element="Button"></div>
+  </div>
+
+  <div id="totalLine">
+    <div class="wrapper palm-row">
+      <div class="floatLeft">Pending Balance:</div>
+      <div id="total" class="floatRight"></div>
+    </div>
+
+    <div class="wrapper">
+      Click final balance to toggle between actual and pending. Click entries to edit details.
+    </div>
+  </div>
+  
 </div>
 
