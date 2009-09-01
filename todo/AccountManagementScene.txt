@@ -1,0 +1,7 @@
+Make it!
+
+Add info icon to account rows, leads to AccountDetailScene
+
+No balance info, just name/type if present
+
+Help text below explaining add/remove process, info buttons

@@ -1,0 +1,5 @@
+Add checkbox for "cleared"
+
+Fix date alignment
+
+Help Text

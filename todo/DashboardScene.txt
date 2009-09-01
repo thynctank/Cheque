@@ -1,0 +1,5 @@
+Move AccountManagementScene stuff out
+
+If no accounts, prompt user for first account creation
+
+Balance across all accounts

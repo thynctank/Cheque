@@ -1,0 +1,11 @@
+Name
+
+Type
+
+Acct #
+
+Routing #
+
+Notes
+
+Help text explaining these notes are just for user's benefit

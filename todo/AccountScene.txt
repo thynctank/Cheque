@@ -1,0 +1,3 @@
+Icon for entry category - credit card, check, money in/out for deposit/withdrawal
+
+Balance on bottom, toggle for pending/actual balance, recalculate on toggle
