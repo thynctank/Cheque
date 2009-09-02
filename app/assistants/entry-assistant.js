@@ -5,7 +5,6 @@ function EntryAssistant(entry, account) {
 	   that needs the scene controller should be done in the setup function below. */
 	this.entry = entry;
 	this.account = account;
-	asst = this;
 }
 
 EntryAssistant.prototype.setup = function() {

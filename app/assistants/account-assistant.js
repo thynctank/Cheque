@@ -4,7 +4,6 @@ function AccountAssistant(account) {
 	   to the scene controller (this.controller) has not be established yet, so any initialization
 	   that needs the scene controller should be done in the setup function below. */
 	this.account = account;
-	asst = this;
 }
 
 AccountAssistant.prototype.setup = function() {
@@ -28,6 +27,7 @@ AccountAssistant.prototype.setup = function() {
   this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {visible: true, items: [
     {label: "New Entry", icon: "new", command: "newEntry"}
   ]});
+
 	/* add event handlers to listen to events from widgets */
 	this.handleListTap = function(event) {
 	  var entry = this.account.entries[event.index];
@@ -38,13 +38,18 @@ AccountAssistant.prototype.setup = function() {
 	    this.updateEntries();
 	  }.bind(this));
 	}.bind(this);
+
+  this.handleBalanceToggle = function() {
+    $$(".balance").invoke("toggle");
+  };
+	
+	$("totalLine").observe("click", this.handleBalanceToggle);
 	this.controller.listen("entryList", Mojo.Event.listTap, this.handleListTap);
 	this.controller.listen("entryList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
 AccountAssistant.prototype.updateEntries = function() {
   this.account.loadEntries(function() {
-    var runningBalance = 0;
     this.entryListModel.items = [];
     if(this.account.entries.length === 0) {
       this.controller.get("totalLine").hide();
@@ -52,10 +57,13 @@ AccountAssistant.prototype.updateEntries = function() {
       this.controller.get("firstTimeBox").show();
     }
     else {
+      var runningBalance = 0;
+      var actualBalance = 0;
       this.controller.get("firstTimeBox").hide();
       this.controller.get("accountListContainer").show();
       this.controller.get("totalLine").show();
-      var runningBalance = 0;
+      this.controller.get("pendingBalance").show();
+      this.controller.get("actualBalance").hide();
       for(var i = 0, j = this.account.entries.length; i < j; i++) {
         this.entryListModel.items[i] = Object.clone(this.account.entries[i]);
         var entry = this.entryListModel.items[i];
@@ -63,17 +71,22 @@ AccountAssistant.prototype.updateEntries = function() {
         switch(entry.type) {
           case "credit":
             runningBalance += entry.amount;
+            if(entry.cleared)
+              actualBalance += entry.amount;
             break;
           case "debit":
             entry.amountString = "-" + entry.amountString;
             runningBalance -= entry.amount;
+            if(entry.cleared)
+              actualBalance -= entry.amount;
             break;
         }
         entry.runningBalance = runningBalance;
         entry.runningBalanceString = entry.runningBalance.toFinancialString();
       }
       this.controller.modelChanged(this.entryListModel);
-      this.controller.get("total").update(runningBalance.toFinancialString());
+      this.controller.get("pendingTotal").update(runningBalance.toFinancialString());
+      this.controller.get("actualTotal").update(actualBalance.toFinancialString());
     }
     
   }.bind(this));
@@ -94,6 +107,7 @@ AccountAssistant.prototype.deactivate = function(event) {
 AccountAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
+ 	$("totalLine").stopObserving("click", this.handleBalanceToggle);
 	this.controller.stopListening("entryList", Mojo.Event.listTap, this.handleListTap);
 	this.controller.stopListening("entryList", Mojo.Event.listDelete, this.handleListDelete);
 };

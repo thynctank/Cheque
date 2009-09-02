@@ -12,18 +12,23 @@
     <div id="entryList" class="palm-list" x-mojo-element="List"></div>
   </div>  
   
-  <div id="firstTimeBox" class="wrapper">
+  <div id="firstTimeBox" class="palm-body-text">
     To add entries, click the button below
     <div id="firstAccountButton" x-mojo-element="Button"></div>
   </div>
 
   <div id="totalLine">
-    <div class="wrapper palm-row">
+    <div id="pendingBalance" class="wrapper balance palm-body-text palm-row">
       <div class="floatLeft">Pending Balance:</div>
-      <div id="total" class="floatRight"></div>
+      <div id="pendingTotal" class="total floatRight"></div>
     </div>
 
-    <div class="wrapper">
+    <div id="actualBalance" class="wrapper balance palm-body-text palm-row">
+      <div class="floatLeft">Actual Balance:</div>
+      <div id="actualTotal" class="total floatRight"></div>
+    </div>
+
+    <div class="palm-body-text">
       Click final balance to toggle between actual and pending. Click entries to edit details.
     </div>
   </div>

@@ -48,7 +48,7 @@ CREATE TABLE `entries` (
   `memo` text,
   `transfer_account_id` int(11) default NULL,
   `transfer_entry_id` int(11) default NULL,
-  `pending` tinyint(4) NOT NULL default '1',
+  `cleared` tinyint(4) NOT NULL default '1',
   `check_number` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;

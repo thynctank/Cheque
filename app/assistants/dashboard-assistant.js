@@ -10,32 +10,39 @@ DashboardAssistant.prototype.setup = function() {
 	this.accountListAttributes = {
     itemTemplate: "dashboard/account_template"
   };
-  this.menuAttributes = {
+  this.appMenuAttributes = {
     omitDefaultItems: true
   };
-  this.menuModel = {
+  this.appMenuModel = {
     visible: true,
     items: [ 
       {label: "About", command: "about"},
-      {label: "Manage Accounts", command: "accounts" },
-      {label: "Help", command: "help" }
+      {label: "Manage Accounts", command: "accounts"},
+      {label: "Help", command: "help"}
+    ]
+  };
+  this.cmdMenuModel = {
+    visible: true,
+    items: [
+      {label: "New Entry", icon: "new", command: "newEntry"}
     ]
   };
   
 	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
-	this.controller.setupWidget(Mojo.Menu.appMenu, this.menuAttributes, this.menuModel);
-  this.controller.setupWidget("firstAccountButton", {}, {label: "Set up your first account"});
+	this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttributes, this.appMenuModel);
+  this.controller.setupWidget("newAccountButton", {}, {label: "Set up your first account!"});
+  this.controller.setupWidget(Mojo.Menu.commandMenu, {}, this.cmdMenuModel);
 
 	this.handleListTap = function(event) {
     var acct = event.item;
     this.controller.stageController.pushScene("account", acct);
   }.bind(this);
-  this.handleFirstAccountTap = function(event) {
+  this.handleNewAccountTap = function(event) {
     this.controller.stageController.pushScene("account-management", {newAccount: true});
   }.bind(this);
   
 	this.controller.listen("accountList", Mojo.Event.listTap, this.handleListTap);
-  this.controller.listen("firstAccountButton", Mojo.Event.tap, this.handleFirstAccountTap);
+  this.controller.listen("newAccountButton", Mojo.Event.tap, this.handleNewAccountTap);
 };
 
 
@@ -77,4 +84,14 @@ DashboardAssistant.prototype.cleanup = function(event) {
 	   a result of being popped off the scene stack */
 	this.controller.stopListening("accountList", Mojo.Event.listTap, this.handleListTap);
   // this.controller.stopListening("firstAccountButton", Mojo.Event.tap, this.handleFirstAccountTap);
+};
+
+DashboardAssistant.prototype.handleCommand = function(event) {
+  if (event.type === Mojo.Event.command) {
+    switch (event.command) {
+      case "newEntry":
+        this.controller.stageController.pushScene("account-management", {newAccount: true});
+        break;
+    }
+  }
 };

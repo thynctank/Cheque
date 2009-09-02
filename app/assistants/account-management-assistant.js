@@ -10,18 +10,21 @@ AccountManagementAssistant.prototype.setup = function() {
 	  items: checkbook.accountsByName()
 	};
 	this.accountListAttributes = {
-    addItemLabel: "New Account",
     itemTemplate: "account-management/account_template",
     swipeToDelete: true
   };
 	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {visible: true, items: [
+    {label: "New Entry", icon: "new", command: "newEntry"}
+  ]});
 
-	this.handleListAdd = function(event) {
+	this.addAccount = function() {
 	  this.controller.showDialog({
 	    template: "account-management/new-account-dialog",
 	    assistant: new AccountDialogAssistant(this)
 	  });
 	}.bind(this);
+
 	this.handleListTap = function(event) {
     var acct = event.item;
     this.controller.stageController.popScenesTo("dashboard");
@@ -34,28 +37,35 @@ AccountManagementAssistant.prototype.setup = function() {
 	  }.bind(this));
 	}.bind(this);
   
-	this.controller.listen("accountList", Mojo.Event.listAdd, this.handleListAdd);
+	this.controller.listen("accountList", Mojo.Event.listAdd, this.addAccount);
 	this.controller.listen("accountList", Mojo.Event.listTap, this.handleListTap);
 	this.controller.listen("accountList", Mojo.Event.listDelete, this.handleListDelete);
 };
 
 AccountManagementAssistant.prototype.updateAccounts = function() {
   this.accountListModel.items = checkbook.accountsByName();
-  for(var i = 0, j = this.accountListModel.items.length; i < j; i++) {
-    var item = this.accountListModel.items[i];
-    item.balanceString = item.balance.toFinancialString();
+  if(this.accountListModel.items.length === 0) {
+    this.controller.get("totalLine").hide();
+    this.controller.get("accountListContainer").hide();
   }
-  this.controller.modelChanged(this.accountListModel);
+  else {
+    this.controller.get("totalLine").show();
+    this.controller.get("accountListContainer").show();
+    for(var i = 0, j = this.accountListModel.items.length; i < j; i++) {
+      var item = this.accountListModel.items[i];
+      item.balanceString = item.balance.toFinancialString();
+    }
+    this.controller.modelChanged(this.accountListModel);
+  }
 };
 
 AccountManagementAssistant.prototype.activate = function(event) {
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
 	this.updateAccounts();
-	if(this.newAccount)
-	  this.handleListAdd();
+  if(this.newAccount)
+    this.addAccount();
 };
-
 
 AccountManagementAssistant.prototype.deactivate = function(event) {
 	/* remove any event handlers you added in activate and do any other cleanup that should happen before
@@ -65,9 +75,19 @@ AccountManagementAssistant.prototype.deactivate = function(event) {
 AccountManagementAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
- 	this.controller.stopListening("accountList", Mojo.Event.listAdd, this.handleListAdd);
+ 	this.controller.stopListening("accountList", Mojo.Event.listAdd, this.addAccount);
 	this.controller.stopListening("accountList", Mojo.Event.listTap, this.handleListTap);
 	this.controller.stopListening("accountList", Mojo.Event.listDelete, this.handleListDelete);
+};
+
+AccountManagementAssistant.prototype.handleCommand = function(event) {
+  if (event.type === Mojo.Event.command) {
+    switch (event.command) {
+      case "newEntry":
+        this.addAccount();
+        break;
+    }
+  }
 };
 
 var AccountDialogAssistant = Class.create({
