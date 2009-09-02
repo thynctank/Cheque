@@ -1,1 +1,5 @@
-Fix db stuff
+Retool categories table to be simple key/value: name/type with index on name.
+
+Set category name as a string on individual entry
+
+When user-defined categories are added, don't allow deletion if any existing entries use that category

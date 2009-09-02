@@ -1,34 +1,34 @@
 Scenes
 ======
 
-  EntryScene - entry details
+  EntryScene - entry details - 2
   
-  AccountManagementScene - manage accounts
+  AccountManagementScene - manage accounts - .5
   
-  AccountDetailScene - acct notes, #s
+  AccountDetailScene - acct notes, #s - 1
   
-  AccountScene - list of entries for acct, actual/cleared balance
+  AccountScene - list of entries for acct, actual/cleared balance - 3
   
-  TransferScene - like EntryScene for transfers
+  TransferScene - like EntryScene for transfers - 2
   
   
   
 Non-Scene Stuff
 ========================
 
-  CategoriesWorking
+  CategoriesWorking - 2
 
-  InAppIcons
+  InAppIcons - 2
   
-  TransfersUsingTransactions
+  TransfersUsingTransactions - 3
   
-  HelpText
+  HelpText - 1
 
-  AboutDialog
+  AboutDialog - 1
   
-  HelpDialog  
+  HelpDialog - 1
 
-  AppIcon
+  AppIcon - .25
   
   AppLogo
   
@@ -37,4 +37,6 @@ Non-Scene Stuff
   RecurringBillReminders
   
   GoogleDocsExport
+  
+  CustomCategories
   
