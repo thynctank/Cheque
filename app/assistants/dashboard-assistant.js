@@ -21,17 +21,16 @@ DashboardAssistant.prototype.setup = function() {
       {label: "Help", command: "help"}
     ]
   };
-  this.cmdMenuModel = {
-    visible: true,
-    items: [
-      {label: "New Entry", icon: "new", command: "newEntry"}
-    ]
-  };
   
 	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
 	this.controller.setupWidget(Mojo.Menu.appMenu, this.appMenuAttributes, this.appMenuModel);
   this.controller.setupWidget("newAccountButton", {}, {label: "Set up your first account!"});
-  this.controller.setupWidget(Mojo.Menu.commandMenu, {}, this.cmdMenuModel);
+  this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {
+    visible: true,
+    items: [
+      {label: "Add Account", command: "newAccount"}
+    ]
+  });
 
 	this.handleListTap = function(event) {
     var acct = event.item;
@@ -89,7 +88,7 @@ DashboardAssistant.prototype.cleanup = function(event) {
 DashboardAssistant.prototype.handleCommand = function(event) {
   if (event.type === Mojo.Event.command) {
     switch (event.command) {
-      case "newEntry":
+      case "newAccount":
         this.controller.stageController.pushScene("account-management", {newAccount: true});
         break;
     }

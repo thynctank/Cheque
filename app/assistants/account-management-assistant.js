@@ -13,10 +13,14 @@ AccountManagementAssistant.prototype.setup = function() {
     itemTemplate: "account-management/account_template",
     swipeToDelete: true
   };
+
 	this.controller.setupWidget("accountList", this.accountListAttributes, this.accountListModel);
-	this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {visible: true, items: [
-    {label: "New Entry", icon: "new", command: "newEntry"}
-  ]});
+	this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {
+	  visible: true,
+	  items: [
+      {label: "New", command: "newAccount"}
+    ]
+  });
 
 	this.addAccount = function() {
 	  this.controller.showDialog({
@@ -81,7 +85,7 @@ AccountManagementAssistant.prototype.cleanup = function(event) {
 AccountManagementAssistant.prototype.handleCommand = function(event) {
   if (event.type === Mojo.Event.command) {
     switch (event.command) {
-      case "newEntry":
+      case "newAccount":
         this.addAccount();
         break;
     }
