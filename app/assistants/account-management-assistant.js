@@ -37,7 +37,6 @@ AccountManagementAssistant.prototype.setup = function() {
 	  }.bind(this));
 	}.bind(this);
   
-	this.controller.listen("accountList", Mojo.Event.listAdd, this.addAccount);
 	this.controller.listen("accountList", Mojo.Event.listTap, this.handleListTap);
 	this.controller.listen("accountList", Mojo.Event.listDelete, this.handleListDelete);
 };
@@ -75,7 +74,6 @@ AccountManagementAssistant.prototype.deactivate = function(event) {
 AccountManagementAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
- 	this.controller.stopListening("accountList", Mojo.Event.listAdd, this.addAccount);
 	this.controller.stopListening("accountList", Mojo.Event.listTap, this.handleListTap);
 	this.controller.stopListening("accountList", Mojo.Event.listDelete, this.handleListDelete);
 };

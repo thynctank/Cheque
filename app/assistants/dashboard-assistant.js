@@ -83,7 +83,7 @@ DashboardAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
 	this.controller.stopListening("accountList", Mojo.Event.listTap, this.handleListTap);
-  // this.controller.stopListening("firstAccountButton", Mojo.Event.tap, this.handleFirstAccountTap);
+  this.controller.stopListening("newAccountButton", Mojo.Event.tap, this.handleFirstAccountTap);
 };
 
 DashboardAssistant.prototype.handleCommand = function(event) {
