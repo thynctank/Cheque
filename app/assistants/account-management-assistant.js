@@ -38,6 +38,7 @@ AccountManagementAssistant.prototype.setup = function() {
 	  checkbook.removeAccount(event.item.name, function() {
   	  this.accountListModel.items = checkbook.accountsByName();
   	  this.controller.modelChanged(this.accountListModel);
+  	  this.updateAccounts();
 	  }.bind(this));
 	}.bind(this);
   

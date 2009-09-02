@@ -25,7 +25,7 @@ AccountAssistant.prototype.setup = function() {
 
   this.controller.setupWidget("entryList", this.entryListAttributes, this.entryListModel);
   this.controller.setupWidget(Mojo.Menu.commandMenu, {}, {visible: true, items: [
-    {label: "New Entry", icon: "new", command: "newEntry"}
+    {label: "New Entry", command: "newEntry"}
   ]});
 
 	/* add event handlers to listen to events from widgets */
@@ -53,12 +53,14 @@ AccountAssistant.prototype.updateEntries = function() {
     this.entryListModel.items = [];
     if(this.account.entries.length === 0) {
       this.controller.get("totalLine").hide();
+      this.controller.get("info").hide();
       this.controller.get("accountListContainer").hide();
       this.controller.get("firstTimeBox").show();
     }
     else {
       var runningBalance = 0;
       var actualBalance = 0;
+      this.controller.get("info").show();
       this.controller.get("firstTimeBox").hide();
       this.controller.get("accountListContainer").show();
       this.controller.get("totalLine").show();

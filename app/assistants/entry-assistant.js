@@ -57,7 +57,7 @@ EntryAssistant.prototype.activate = function(event) {
   checkbook.storage.read("categories", null, null, function(rows) {
     for(var i = 0, j = rows.length; i < j; i++) {
       row = rows[i];
-      this.categoryModel.choices.push({label: row.name, value: i, type: row.type});
+      this.categoryModel.choices.push({label: row.name, value: row.code, type: row.type});
     }
     this.controller.modelChanged(this.categoryModel);
   }.bind(this));
