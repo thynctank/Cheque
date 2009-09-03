@@ -1,1 +1,4 @@
 Add info icon to account rows, leads to AccountDetailScene
+
+Add delete confirmation dialog on swipe to delete. Perhaps get rid of built-in confirmation?
+  (or added in addition to built-in...?)
