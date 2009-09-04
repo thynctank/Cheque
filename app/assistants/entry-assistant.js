@@ -48,7 +48,6 @@ EntryAssistant.prototype.setup = function() {
 	  this.entry.date = this.dateModel.date.getTime();
 	  this.entry.memo = this.memoModel.value;
 	  this.entry.cleared = parseInt(this.checkBoxModel.value, 10);
-	  console.log(this.entry.cleared);
 	  this.account.writeEntry(this.entry, function() {
 	    this.controller.stageController.popScene();
 	  }.bind(this));

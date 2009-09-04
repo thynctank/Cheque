@@ -1,5 +1,5 @@
-Make "cleared" checkbox work correctly - not saving currently
-
 Fix date alignment (move into dialog?)
+
+Generally pretty up form
 
 Help Text
