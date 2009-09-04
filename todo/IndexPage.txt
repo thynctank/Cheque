@@ -34,10 +34,10 @@ Non-Scene Stuff
   
   WebSite
   
+  CustomCategories
+
   RecurringBillReminders
   
   GoogleDocsExport
-  
-  CustomCategories
-  
+    
   HandleMaxEntriesStored
