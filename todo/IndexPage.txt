@@ -40,3 +40,4 @@ Non-Scene Stuff
   
   CustomCategories
   
+  HandleMaxEntriesStored

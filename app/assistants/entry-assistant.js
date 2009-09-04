@@ -5,6 +5,7 @@ function EntryAssistant(entry, account) {
 	   that needs the scene controller should be done in the setup function below. */
 	this.entry = entry;
 	this.account = account;
+	asst = this;
 }
 
 EntryAssistant.prototype.setup = function() {
@@ -13,11 +14,13 @@ EntryAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-  this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || 1});
-  this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
-  this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
-  this.controller.setupWidget("date", {}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
+  var disableFieldsValue = (this.entry.category && this.entry.category.indexOf("Starting balance") > -1); 
+  this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
+  this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || "", disabled: disableFieldsValue});
+  this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : "", disabled: disableFieldsValue});
+  this.controller.setupWidget("date", {}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date(), disabled: disableFieldsValue});
   this.controller.setupWidget("memo", {}, this.memoModel = {value: this.entry.memo || ""});
+  this.controller.setupWidget("cleared", {trueValue: "1", falseValue: "0"}, this.checkBoxModel = {value: this.entry.cleared || "0", disabled: disableFieldsValue});
   this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
 
 	var entryState;
@@ -39,11 +42,13 @@ EntryAssistant.prototype.setup = function() {
 	    return;
 	  }
 	  this.entry.category = this.categoryModel.value;
-	  this.entry.subject = this.controller.get("subject").mojo.getValue() || this.categoryModel.choices[this.categoryModel.value].label;
-	  this.entry.type = this.categoryModel.choices[this.categoryModel.value].type;
+	  this.entry.subject = this.controller.get("subject").mojo.getValue() || this.entry.category;
+	  this.entry.type = this.categoryHash.get(this.categoryModel.value).type;
 	  this.entry.amount = this.controller.get("amount").mojo.getValue().toCents();
 	  this.entry.date = this.dateModel.date.getTime();
 	  this.entry.memo = this.memoModel.value;
+	  this.entry.cleared = parseInt(this.checkBoxModel.value, 10);
+	  console.log(this.entry.cleared);
 	  this.account.writeEntry(this.entry, function() {
 	    this.controller.stageController.popScene();
 	  }.bind(this));
@@ -54,10 +59,13 @@ EntryAssistant.prototype.setup = function() {
 
 EntryAssistant.prototype.activate = function(event) {
   this.categoryModel.choices = [];
+  this.categoryHash = new ChequeHash();
   checkbook.storage.read("categories", null, null, function(rows) {
+    this.categoryModel.value = rows[0].name;
     for(var i = 0, j = rows.length; i < j; i++) {
       row = rows[i];
-      this.categoryModel.choices.push({label: row.name, value: row.code, type: row.type});
+      this.categoryHash.set(row.name, row);
+      this.categoryModel.choices.push({label: row.name, value: row.name});
     }
     this.controller.modelChanged(this.categoryModel);
   }.bind(this));

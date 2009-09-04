@@ -1,0 +1,3 @@
+After 2 months (?) add up first month and insert as single entry prior to 2nd month as "Current balance, xx/xx/xxxx"
+
+Add preference?
