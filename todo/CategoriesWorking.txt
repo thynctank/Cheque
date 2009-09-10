@@ -1,3 +1,1 @@
-Move table creation/defaults population into Checkbook constructor so it's only attempted once during startup
-
 When user-defined categories are added, don't allow deletion if any existing entries use that category
