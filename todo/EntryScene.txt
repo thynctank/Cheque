@@ -1,4 +1,4 @@
-Fix date alignment (move into dialog?)
+Move date into dialog, show rendered string before tap
 
 Generally pretty up form
 
