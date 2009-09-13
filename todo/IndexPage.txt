@@ -1,9 +1,9 @@
 Scenes
 ======
 
-  TransferScene - like EntryScene for transfers - 2
-  
   EntryScene - entry details - 2
+  
+  TransferScene - like EntryScene for transfers - 2
   
   AccountManagementScene - manage accounts - .5
   
@@ -11,15 +11,9 @@ Scenes
   
   AccountScene - list of entries for acct, actual/cleared balance - 3
   
-  
-  
 Non-Scene Stuff
 ========================
 
-  CategoriesWorking - 2
-
-  TransfersUsingTransactions - 3
-  
   InAppIcons - 2
   
   HelpText - 1
@@ -30,14 +24,14 @@ Non-Scene Stuff
 
   AppIcon - .25
   
-  AppLogo
+  AppLogo - .25
   
-  WebSite
+  WebSite - 12
   
-  CustomCategories
+  CustomCategories - 4
 
-  RecurringBillReminders
+  RecurringBillReminders - 6
   
-  GoogleDocsExport
+  GoogleDocsExport - 6
     
-  HandleMaxEntriesStored
+  HandleMaxEntriesStored - 6
