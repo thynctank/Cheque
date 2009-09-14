@@ -14,15 +14,13 @@ EntryAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-  var disableFieldsValue = (this.entry.category && this.entry.category.indexOf("Starting balance") > -1); 
-  
-  this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || "", disabled: disableFieldsValue});
-  this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || "", disabled: disableFieldsValue});
-  this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : "", disabled: disableFieldsValue});
+  this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
+  this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
+  this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
   this.controller.setupWidget("date", {}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
-  this.controller.setupWidget("memo", {}, this.memoModel = {value: this.entry.memo || "", disabled: disableFieldsValue});
-  this.controller.setupWidget("cleared", {trueValue: "1", falseValue: "0"}, this.checkBoxModel = {value: this.entry.cleared || "0", disabled: disableFieldsValue});
-  this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save", disabled: disableFieldsValue});
+  this.controller.setupWidget("memo", {}, this.memoModel = {value: this.entry.memo || ""});
+  this.controller.setupWidget("cleared", {trueValue: "1", falseValue: "0"}, this.checkBoxModel = {value: this.entry.cleared || "0"});
+  this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
 
 	var entryState;
 	if(this.entry.id) {
