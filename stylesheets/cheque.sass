@@ -2,12 +2,6 @@
   :float right
 .floatLeft
   :float left
-#date 
-  :margin-left 8px
-  .label
-    :float right
-    :margin-right 8px
-    :margin-left 0
 #accountList, #entryList
   *
     :font-size 16px
@@ -44,14 +38,36 @@
       :padding-right 16px
 .accountRightTitle span 
   :margin-right 16px
-#mojo-scene-entry .palm-popup-content .palm-row
-  :min-height 20px
-  .popup-item-checkmark
-    :margin 2px 10px 0 0
-  .title
-    :padding 10px
-    :font-size 16px
-    :line-height 16px
+#mojo-scene-entry
+  #main
+    .palm-row
+      .title
+        :margin -10px
+  .palm-popup-content .palm-row
+    :min-height 20px
+    .popup-item-checkmark
+      :margin 2px 10px 0 0
+    .title
+      :padding 10px
+      :font-size 16px
+      :line-height 16px
+  #cleared
+    .palm-radiobutton
+      :min-width 0
+  #detailsDrawer
+    .palm-drawer-container
+      :-webkit-border-image none
+      :-webkit-sizing content-box
+      .palm-drawer-contents
+        :margin 0
+        .dateRow
+          :padding 1px
+          #date 
+            :margin auto auto 8px 8px
+            :margin-left 8px
+            .label
+              :float right
+              :margin 0 8px 0 0
 #totalLine
   :width 100%
   .palm-row

@@ -1,7 +1,5 @@
 Scenes
 ======
-
-  EntryScene - entry details - 6
   
   TransferScene - like EntryScene for transfers - 2
   

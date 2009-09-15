@@ -39,34 +39,40 @@
 					</div>
 				</div>
 			</div>			
-
-			<div class="palm-row">
-				<div class="palm-row-wrapper">
-					<div class="textfield-group" x-mojo-focus-highlight="true">
-						<div class="title">
-							<div class="label">
-								Memo
-							</div>
-              <div id="memo" x-mojo-element="TextField"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-      <div class="palm-row">
-				<div class="palm-row-wrapper">
-					<div class="textfield-group" x-mojo-focus-highlight="true">
-						<div class="title">
-						  <div class="label">
-    						Cleared
-    					</div>
-              <div id="cleared" x-mojo-element="CheckBox"></div>
-						</div>
-					</div>
-				</div>
-			</div>
 			
-      <div id="date" x-mojo-element="DatePicker"></div>
+      <div id="cleared" x-mojo-element="RadioButton"></div>
+      
+			<table id="addlDetails" class="palm-divider collapsible">
+        <tr>
+          <td class="left"></td>
+          <td class="label">Additional Details</td>
+          <td class="line"></td>
+          <!-- toggle to palm-arrow-expanded -->
+          <td><div id="addlDetailsArrow" class="palm-arrow-closed arrow_button"></div></td>
+          <td class="right"></td>
+        </tr>
+      </table>
+			
+			<div id="detailsDrawer" x-mojo-element="Drawer">
+
+        <div class="palm-row dateRow">
+          <div id="date" x-mojo-element="DatePicker"></div>
+        </div>
+
+  			<div class="palm-row">
+  				<div class="palm-row-wrapper">
+  					<div class="textfield-group" x-mojo-focus-highlight="true">
+  						<div class="title">
+  							<div class="label">
+  								Memo
+  							</div>
+                <div id="memo" x-mojo-element="TextField"></div>
+  						</div>
+  					</div>
+  				</div>
+  			</div>
+
+			</div>
 			
 			<div class="palm-row last">
 				<div class="palm-row-wrapper">

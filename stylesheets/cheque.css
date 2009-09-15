@@ -4,13 +4,6 @@
 .floatLeft {
   float: left; }
 
-#date {
-  margin-left: 8px; }
-  #date .label {
-    float: right;
-    margin-right: 8px;
-    margin-left: 0; }
-
 #accountList *, #entryList * {
   font-size: 16px; }
 
@@ -52,6 +45,8 @@
 .accountRightTitle span {
   margin-right: 16px; }
 
+#mojo-scene-entry #main .palm-row .title {
+  margin: -10px; }
 #mojo-scene-entry .palm-popup-content .palm-row {
   min-height: 20px; }
   #mojo-scene-entry .palm-popup-content .palm-row .popup-item-checkmark {
@@ -60,6 +55,21 @@
     padding: 10px;
     font-size: 16px;
     line-height: 16px; }
+#mojo-scene-entry #cleared .palm-radiobutton {
+  min-width: 0; }
+#mojo-scene-entry #detailsDrawer .palm-drawer-container {
+  -webkit-border-image: none;
+  -webkit-sizing: content-box; }
+  #mojo-scene-entry #detailsDrawer .palm-drawer-container .palm-drawer-contents {
+    margin: 0; }
+    #mojo-scene-entry #detailsDrawer .palm-drawer-container .palm-drawer-contents .dateRow {
+      padding: 1px; }
+      #mojo-scene-entry #detailsDrawer .palm-drawer-container .palm-drawer-contents .dateRow #date {
+        margin: auto auto 8px 8px;
+        margin-left: 8px; }
+        #mojo-scene-entry #detailsDrawer .palm-drawer-container .palm-drawer-contents .dateRow #date .label {
+          float: right;
+          margin: 0 8px 0 0; }
 
 #totalLine {
   width: 100%; }
