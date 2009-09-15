@@ -1,0 +1,5 @@
+Tapping into an existing transfer preloads transfer_account_id, shows selector
+
+Deleting transfers must delete other end of transfer as well
+
+Changing transfer to another type must delete other end of transfer

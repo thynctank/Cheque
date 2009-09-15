@@ -5,7 +5,6 @@ function EntryAssistant(entry, account) {
 	   that needs the scene controller should be done in the setup function below. */
 	this.entry = entry;
 	this.account = account;
-	asst = this;
 }
 
 EntryAssistant.prototype.setup = function() {
@@ -15,6 +14,7 @@ EntryAssistant.prototype.setup = function() {
 	
 	/* setup widgets here */
   this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
+  this.controller.setupWidget("transferToAccount", {label: "To Account"}, this.transferModel = {choices: [], value: this.entry.transfer_account_id || ""});
   this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
   this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
   this.controller.setupWidget("cleared", {choices: [
@@ -51,9 +51,22 @@ EntryAssistant.prototype.setup = function() {
 	  this.entry.date = this.dateModel.date.getTime();
 	  this.entry.memo = this.memoModel.value;
 	  this.entry.cleared = parseInt(this.clearedModel.value, 10);
+	  
+	  if(this.categoryModel.value === "Transfer") {
+	    this.entry.transfer_account_id = this.transferModel.value;
+	    //if transfer_account_id changed, delete original other end of existing transfer
+	    //save using this.account.transfer()
+	  }
+	  else {
+	    //wipe out other end of existing transfer if previously-existing
+      //clear transfer fields
+      //save
+	  }
+
 	  this.account.writeEntry(this.entry, function() {
 	    this.controller.stageController.popScene();
 	  }.bind(this));
+	  
 	}.bind(this);
 	
 	this.handleAddlDetailsToggle = function() {
@@ -69,24 +82,66 @@ EntryAssistant.prototype.setup = function() {
 	  this.controller.get("detailsDrawer").mojo.toggleState();
 	}.bind(this);
 	
+	this.handlePropChange = function(evt) {
+	  if(evt.value === "Transfer") {
+	    $("accountSelector").show();
+	  }
+	  else {
+	    $("accountSelector").hide();
+	  }
+	}.bind(this);
+	
+	this.handleEnter = function(event) {
+    if(event && event.originalEvent && event.originalEvent.keyCode && Mojo.Char.isEnterKey(event.originalEvent.keyCode))
+      this.handleSave();
+  }.bind(this);
+	
 	this.controller.listen("save", Mojo.Event.tap, this.handleSave);
+	this.controller.listen("category", Mojo.Event.propertyChange, this.handlePropChange);
 	$("addlDetails").observe("click", this.handleAddlDetailsToggle);
+	this.controller.listen("amount", Mojo.Event.propertyChange, this.handleEnter);
 };
 
 EntryAssistant.prototype.activate = function(event) {
+  //load account names and categories
+  this.transferModel.choices = [];
+  this.transferHash = new ChequeHash();
+  checkbook.storage.read("accounts", null, null, function(rows) {
+    this.transferModel.value = rows[0].id;
+    var row = null;
+    for(var i = 0, j = rows.length; i < j; i++) {
+      row = rows[i];
+      if(row.id !== this.entry.account.id) {
+        this.transferHash.set(row.name, row);
+        this.transferModel.choices.push({label: row.name, value: row.id});
+      }
+    }
+    if(this.entry.transfer_account_id)
+      this.transferModel.value = this.entry.transfer_account_id;
+    this.controller.modelChanged(this.transferModel);
+  }.bind(this));
+
+  // TODO: need to move this into callback of transfer read above, but not working...
   this.categoryModel.choices = [];
   this.categoryHash = new ChequeHash();
   checkbook.storage.read("categories", null, null, function(rows) {
     this.categoryModel.value = rows[0].name;
+    var row = null;
+    var numberOfAccounts = this.transferHash.getLength();
     for(var i = 0, j = rows.length; i < j; i++) {
       row = rows[i];
-      this.categoryHash.set(row.name, row);
-      this.categoryModel.choices.push({label: row.name, value: row.name});
+      // if only one account, disallow transfer
+      if(numberOfAccounts > 1 || row.name !== "Transfer") {
+        this.categoryHash.set(row.name, row);
+        this.categoryModel.choices.push({label: row.name, value: row.name});
+      }
     }
     if(this.entry.category)
       this.categoryModel.value = this.entry.category;
     this.controller.modelChanged(this.categoryModel);
   }.bind(this));
+  
+  
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
 };
@@ -100,5 +155,7 @@ EntryAssistant.prototype.cleanup = function(event) {
 	/* this function should do any cleanup needed before the scene is destroyed as 
 	   a result of being popped off the scene stack */
 	this.controller.stopListening("save", Mojo.Event.tap, this.handleSave);
+	this.controller.stopListening("category", Mojo.Event.propertyChange, this.handlePropChange);
 	$("addlDetails").stopObserving("click", this.handleAddlDetailsToggle);
+	this.controller.stopListening("amount", Mojo.Event.propertyChange, this.handleEnter);
 };

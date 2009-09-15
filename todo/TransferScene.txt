@@ -1,5 +1,0 @@
-Present list of accounts to transfer to, amount field, date.
-
-Tapping into an existing transfer brings up this scene - only amount/date can be changed
-
-Deleting transfers must delete other end of transfer as well
