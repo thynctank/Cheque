@@ -17,9 +17,9 @@ EntryAssistant.prototype.setup = function() {
   this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
   this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
   this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
-  this.controller.setupWidget("date", {}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
   this.controller.setupWidget("memo", {}, this.memoModel = {value: this.entry.memo || ""});
   this.controller.setupWidget("cleared", {trueValue: "1", falseValue: "0"}, this.checkBoxModel = {value: this.entry.cleared || "0"});
+  this.controller.setupWidget("date", {labelPlacement: Mojo.Widget.labelPlacementRight}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
   this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
 
 	var entryState;

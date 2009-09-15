@@ -4,8 +4,12 @@
 .floatLeft {
   float: left; }
 
-#date .label {
-  display: none; }
+#date {
+  margin-left: 8px; }
+  #date .label {
+    float: right;
+    margin-right: 8px;
+    margin-left: 0; }
 
 #accountList *, #entryList * {
   font-size: 16px; }
