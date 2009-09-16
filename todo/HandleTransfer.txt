@@ -1,5 +1,3 @@
-Tapping into an existing transfer preloads transfer_account_id, shows selector
+Saving an existing transfer *always* deletes it on both ends, then recreates it (if indeed the entry is still a transfer)
 
-Deleting transfers must delete other end of transfer as well
-
-Changing transfer to another type must delete other end of transfer
+Saving an existing non-transfer as a transfer should delete the original transfer

@@ -12,10 +12,6 @@ Scenes
 Non-Scene Stuff
 ========================
 
-  PreloadAccountsListAsGlobalInDashboard - .5
-
-  HandleEnterKeyInAmountField - .5
-
   HandleTransfer - EntryScene with transfers - 2
 
   InAppIcons - 2

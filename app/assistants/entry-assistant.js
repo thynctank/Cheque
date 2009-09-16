@@ -14,14 +14,14 @@ EntryAssistant.prototype.setup = function() {
 	
 	/* setup widgets here */
   this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
-  this.controller.setupWidget("transferToAccount", {label: "To Account"}, this.transferModel = {choices: checkbook.accountsByName(), value: this.entry.transfer_account_id || ""});
+  this.controller.setupWidget("transferToAccount", {label: "To Account"}, this.transferModel = {choices: [], value: this.entry.transfer_account_id || ""});
   this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
-  this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
+  this.controller.setupWidget("amount", {requiresEnterKey: true, focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
   this.controller.setupWidget("cleared", {choices: [
       {label: "Pending", value: "0"},
       {label: "Cleared", value: "1"}
     ]}, this.clearedModel = {value: this.entry.cleared || "0"});
-  this.controller.setupWidget("memo", {}, this.memoModel = {value: this.entry.memo || ""});
+  this.controller.setupWidget("memo", {requiresEnterKey: true}, this.memoModel = {value: this.entry.memo || ""});
   this.controller.setupWidget("date", {labelPlacement: Mojo.Widget.labelPlacementRight}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
   this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
   this.controller.setupWidget("detailsDrawer", {}, {open: false});
@@ -100,11 +100,25 @@ EntryAssistant.prototype.setup = function() {
 	this.controller.listen("category", Mojo.Event.propertyChange, this.handlePropChange);
 	$("addlDetails").observe("click", this.handleAddlDetailsToggle);
 	this.controller.listen("amount", Mojo.Event.propertyChange, this.handleEnter);
+	this.controller.listen("memo", Mojo.Event.propertyChange, this.handleEnter);
 };
 
 EntryAssistant.prototype.activate = function(event) {
+  if(this.entry.transfer_account_id)
+    $("accountSelector").show();
+  
   //load account names and categories
-  // TODO: need to move this into callback of transfer read above, but not working...
+  this.transferModel.choices = [];
+  var accounts = checkbook.accountsByName();
+  for(var i = 0, j = accounts.length; i < j; i++) {
+    acct = accounts[i];
+    if(acct.id !== this.account.id)
+      this.transferModel.choices.push({label: acct.name, value: acct.id});
+  }
+  if(this.entry.transfer_account_id)
+    this.transferModel.value = this.entry.transfer_account_id;
+  this.controller.modelChanged(this.transferModel);
+
   this.categoryModel.choices = [];
   this.categoryHash = new ChequeHash();
   checkbook.storage.read("categories", null, null, function(rows) {
@@ -113,7 +127,7 @@ EntryAssistant.prototype.activate = function(event) {
     for(var i = 0, j = rows.length; i < j; i++) {
       row = rows[i];
       // if only one account, disallow transfer
-      if(this.transferModel.choices.length > 1 || row.name !== "Transfer") {
+      if(this.transferModel.choices.length || row.name !== "Transfer") {
         this.categoryHash.set(row.name, row);
         this.categoryModel.choices.push({label: row.name, value: row.name});
       }
@@ -122,7 +136,6 @@ EntryAssistant.prototype.activate = function(event) {
       this.categoryModel.value = this.entry.category;
     this.controller.modelChanged(this.categoryModel);
   }.bind(this));
-  
   
 	/* put in event handlers here that should only be in effect when this scene is active. For
 	   example, key handlers that are observing the document */
@@ -140,4 +153,5 @@ EntryAssistant.prototype.cleanup = function(event) {
 	this.controller.stopListening("category", Mojo.Event.propertyChange, this.handlePropChange);
 	$("addlDetails").stopObserving("click", this.handleAddlDetailsToggle);
 	this.controller.stopListening("amount", Mojo.Event.propertyChange, this.handleEnter);
+	this.controller.stopListening("memo", Mojo.Event.propertyChange, this.handleEnter);
 };
