@@ -14,7 +14,7 @@ EntryAssistant.prototype.setup = function() {
 	
 	/* setup widgets here */
   this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
-  this.controller.setupWidget("transferToAccount", {label: "To Account"}, this.transferModel = {choices: [], value: this.entry.transfer_account_id || ""});
+  this.controller.setupWidget("transferToAccount", {label: "To Account"}, this.transferModel = {choices: checkbook.accountsByName(), value: this.entry.transfer_account_id || ""});
   this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
   this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
   this.controller.setupWidget("cleared", {choices: [
@@ -104,34 +104,16 @@ EntryAssistant.prototype.setup = function() {
 
 EntryAssistant.prototype.activate = function(event) {
   //load account names and categories
-  this.transferModel.choices = [];
-  this.transferHash = new ChequeHash();
-  checkbook.storage.read("accounts", null, null, function(rows) {
-    this.transferModel.value = rows[0].id;
-    var row = null;
-    for(var i = 0, j = rows.length; i < j; i++) {
-      row = rows[i];
-      if(row.id !== this.entry.account.id) {
-        this.transferHash.set(row.name, row);
-        this.transferModel.choices.push({label: row.name, value: row.id});
-      }
-    }
-    if(this.entry.transfer_account_id)
-      this.transferModel.value = this.entry.transfer_account_id;
-    this.controller.modelChanged(this.transferModel);
-  }.bind(this));
-
   // TODO: need to move this into callback of transfer read above, but not working...
   this.categoryModel.choices = [];
   this.categoryHash = new ChequeHash();
   checkbook.storage.read("categories", null, null, function(rows) {
     this.categoryModel.value = rows[0].name;
     var row = null;
-    var numberOfAccounts = this.transferHash.getLength();
     for(var i = 0, j = rows.length; i < j; i++) {
       row = rows[i];
       // if only one account, disallow transfer
-      if(numberOfAccounts > 1 || row.name !== "Transfer") {
+      if(this.transferModel.choices.length > 1 || row.name !== "Transfer") {
         this.categoryHash.set(row.name, row);
         this.categoryModel.choices.push({label: row.name, value: row.name});
       }
