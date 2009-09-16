@@ -12,6 +12,10 @@ Scenes
 Non-Scene Stuff
 ========================
 
+  Transfers - should changing category of a transfer simply break the bond of the two entries, rather than deleting both sides?
+  
+  FixUpgradeToTransferAndDowngradeFromTransfer
+
   InAppIcons - 2
   
   HelpText - 1

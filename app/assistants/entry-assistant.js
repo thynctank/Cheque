@@ -9,6 +9,8 @@ function EntryAssistant(entry, entryIndex, account) {
 	
 	if(this.entry.category)
 	  this.entry.originalCategory = this.entry.category;
+	  
+	asst = this;
 }
 
 EntryAssistant.prototype.setup = function() {
@@ -64,14 +66,12 @@ EntryAssistant.prototype.setup = function() {
     // handle transfer
 	  if(this.entry.category === "Transfer") {
 	    
-	    this.entry.transfer_account_id = parseInt(this.transferModel.value, 10);
-	    
 	    //save using this.account.transfer()
 	    var saveEntry = function() {
-  	    this.entry.transferAccountName = checkbook.getAccountById(this.entry.transfer_account_id).name;
+  	    this.entry.transferAccountName = checkbook.getAccountById(parseInt(this.transferModel.value, 10)).name;
         
   	    this.account.transfer(this.entry, function() {
-  	      this.controller.stageController.popScene();
+          this.controller.stageController.popScene();
   	    }.bind(this));
 	    }.bind(this);
 	    
@@ -85,13 +85,13 @@ EntryAssistant.prototype.setup = function() {
 	  else {
       // handle non-transfer entry
 	    this.entry.subject = this.controller.get("subject").mojo.getValue() || this.entry.category;
-  	  
-      //clear transfer fields
-	    this.entry.transfer_account_id = null;
-	    this.entry.transfer_entry_id = null;
 
       //save
       var saveEntry = function() {
+        //clear transfer fields
+  	    this.entry.transfer_account_id = null;
+  	    this.entry.transfer_entry_id = null;
+        
     	  this.account.writeEntry(this.entry, function() {
     	    this.controller.stageController.popScene();
     	  }.bind(this));
