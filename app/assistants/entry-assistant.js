@@ -1,10 +1,14 @@
-function EntryAssistant(entry, account) {
+function EntryAssistant(entry, entryIndex, account) {
 	/* this is the creator function for your scene assistant object. It will be passed all the 
 	   additional parameters (after the scene name) that were passed to pushScene. The reference
 	   to the scene controller (this.controller) has not be established yet, so any initialization
 	   that needs the scene controller should be done in the setup function below. */
 	this.entry = entry;
+	this.entryIndex = entryIndex;
 	this.account = account;
+	
+	if(this.entry.category)
+	  this.entry.originalCategory = this.entry.category;
 }
 
 EntryAssistant.prototype.setup = function() {
@@ -15,8 +19,8 @@ EntryAssistant.prototype.setup = function() {
 	/* setup widgets here */
   this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
   this.controller.setupWidget("transferToAccount", {label: "To Account"}, this.transferModel = {choices: [], value: this.entry.transfer_account_id || ""});
-  this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
-  this.controller.setupWidget("amount", {requiresEnterKey: true, focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
+  this.controller.setupWidget("subject", {focus: true}, this.subjectModel = {value: this.entry.subject || ""});
+  this.controller.setupWidget("amount", {requiresEnterKey: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
   this.controller.setupWidget("cleared", {choices: [
       {label: "Pending", value: "0"},
       {label: "Cleared", value: "1"}
@@ -39,33 +43,68 @@ EntryAssistant.prototype.setup = function() {
 	
 	this.handleSave = function() {
 	  if(isNaN(parseInt(this.controller.get("amount").mojo.getValue(), 10))) {
-	    Mojo.Controller.errorDialog("Entry requires amount!");
+	    Mojo.Controller.errorDialog("Entry requires an amount!");
 	    this.controller.get("save").mojo.deactivate();
 	    this.controller.get("amount").mojo.focus();
 	    return;
 	  }
+	  
+	  if(this.categoryModel.value === "Transfer" && !this.transferModel.value) {
+	    Mojo.Controller.errorDialog("Transfer requires a To account!");
+	    return;
+	  }
+	  
 	  this.entry.category = this.categoryModel.value;
-	  this.entry.subject = this.controller.get("subject").mojo.getValue() || this.entry.category;
 	  this.entry.type = this.categoryHash.get(this.categoryModel.value).type;
 	  this.entry.amount = this.controller.get("amount").mojo.getValue().toCents();
 	  this.entry.date = this.dateModel.date.getTime();
 	  this.entry.memo = this.memoModel.value;
 	  this.entry.cleared = parseInt(this.clearedModel.value, 10);
 	  
-	  if(this.categoryModel.value === "Transfer") {
-	    this.entry.transfer_account_id = this.transferModel.value;
-	    //if transfer_account_id changed, delete original other end of existing transfer
+    // handle transfer
+	  if(this.entry.category === "Transfer") {
+	    
+	    this.entry.transfer_account_id = parseInt(this.transferModel.value, 10);
+	    
 	    //save using this.account.transfer()
+	    var saveEntry = function() {
+  	    this.entry.transferAccountName = checkbook.getAccountById(this.entry.transfer_account_id).name;
+        
+  	    this.account.transfer(this.entry, function() {
+  	      this.controller.stageController.popScene();
+  	    }.bind(this));
+	    }.bind(this);
+	    
+	    //delete original no matter what
+	    if(this.entry.id) {
+	      this.account.eraseEntry(this.entryIndex, saveEntry);
+	    }
+	    else
+	      saveEntry();
 	  }
 	  else {
-	    //wipe out other end of existing transfer if previously-existing
+      // handle non-transfer entry
+	    this.entry.subject = this.controller.get("subject").mojo.getValue() || this.entry.category;
+  	  
       //clear transfer fields
+	    this.entry.transfer_account_id = null;
+	    this.entry.transfer_entry_id = null;
+
       //save
+      var saveEntry = function() {
+    	  this.account.writeEntry(this.entry, function() {
+    	    this.controller.stageController.popScene();
+    	  }.bind(this));
+      }.bind(this);
+      
+      // erase original if it was a transfer
+      if(this.entry.originalCategory && this.entry.originalCategory === "Transfer") {
+        this.account.eraseEntry(this.entryIndex, saveEntry);
+      }
+      else
+        saveEntry();
 	  }
 
-	  this.account.writeEntry(this.entry, function() {
-	    this.controller.stageController.popScene();
-	  }.bind(this));
 	  
 	}.bind(this);
 	

@@ -1,3 +1,1 @@
 Icon for entry category - credit card, check, money in/out for deposit/withdrawal
-
-Set default categories for CategoriesWorking

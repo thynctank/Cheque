@@ -31,7 +31,7 @@ AccountAssistant.prototype.setup = function() {
 	/* add event handlers to listen to events from widgets */
 	this.handleListTap = function(event) {
 	  var entry = this.account.entries[event.index];
-	  this.controller.stageController.pushScene("entry", entry, this.account);
+	  this.controller.stageController.pushScene("entry", entry, event.index, this.account);
 	}.bind(this);
 	this.handleListDelete = function(event) {
 	  this.account.eraseEntry(event.index, function() {
@@ -118,7 +118,7 @@ AccountAssistant.prototype.handleCommand = function(event) {
   if (event.type === Mojo.Event.command) {
     switch (event.command) {
       case "newEntry":
-        this.controller.stageController.pushScene("entry", {}, this.account);
+        this.controller.stageController.pushScene("entry", {}, null, this.account);
         break;
     }
   }

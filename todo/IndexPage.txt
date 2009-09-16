@@ -5,14 +5,12 @@ Scenes
   
   AccountDetailScene - acct notes, #s - 1
   
-  AccountScene - list of entries for acct, actual/cleared balance - 3
+  AccountScene - 3
   
 
 
 Non-Scene Stuff
 ========================
-
-  HandleTransfer - EntryScene with transfers - 2
 
   InAppIcons - 2
   
@@ -35,3 +33,5 @@ Non-Scene Stuff
   GoogleDocsExport - 6
     
   HandleMaxEntriesStored - 6
+  
+  BreakStringsIntoConstantsInStageAsst - 2
