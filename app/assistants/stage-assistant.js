@@ -27,7 +27,7 @@ numericFilter = function(entry, negativeAllowed) {
 
 StageAssistant.prototype.setup = function() {
   checkbook = new Checkbook("cheque", function() {
-    checkbook.storage.logging = true;
+    // checkbook.storage.logging = true;
   	this.controller.pushScene("dashboard");
   }.bind(this));
 };

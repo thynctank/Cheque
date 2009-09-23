@@ -6,5 +6,6 @@
 	"type": "web",
 	"main": "index.html",
 	"title": "Cheque",
-	"icon": "icon.png"
+	"icon": "icon.png",
+	"theme": "light"
 }
