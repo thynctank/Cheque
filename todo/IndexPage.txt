@@ -14,7 +14,11 @@ Non-Scene Stuff
 
   Transfers - should changing category of a transfer simply break the bond of the two entries, rather than deleting both sides?
   
-  FixUpgradeToTransferAndDowngradeFromTransfer
+  FixUpgradeToTransferAndDowngradeFromTransfer - 2
+  
+  SetAcctTypeInNewAcctDialog - 2
+  
+  AcctInfoButton - 1
 
   InAppIcons - 2
   
@@ -25,6 +29,8 @@ Non-Scene Stuff
   HelpDialog - 1
 
   AppIcon - .25
+  
+  BreakStringsIntoConstantsInStageAsst - 2
   
   AppLogo - .25
   
@@ -38,4 +44,6 @@ Non-Scene Stuff
     
   HandleMaxEntriesStored - 6
   
-  BreakStringsIntoConstantsInStageAsst - 2
+  AutoCompleteSubject - 4
+
+  
