@@ -1,0 +1,5 @@
+Map types to negative/positive balances, affects display of running/final balance on all screens and combined accounts balance on dashboard.
+
+Checking, Savings, Other Asset => positive
+
+Credit Card, Loan, Other Debt => negative
