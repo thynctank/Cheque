@@ -1,1 +1,3 @@
 Perform like "x%" selects on entries (or only entries for current account? User preference?...)
+
+Make use of FilterList widget
