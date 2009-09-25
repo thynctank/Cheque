@@ -1,0 +1,20 @@
+For existing transfers:
+
+  Changing amount and/or subject:
+    1. Write new amt/subject to both existing entries
+      1a. Save other account async
+      1b. Save this account
+      1c. Callback
+
+  Changing type:
+    1. Erase other entry
+      1a. Save other account async
+    2. Erase transfer fields on this entry
+      2a. Save this account
+      2b. Callback
+
+For converting a non-transfer to a transfer:
+  1. Delete existing entry
+  2. Call acct.transfer()
+    2a. Save this account
+    2b. Callback

@@ -1,9 +1,9 @@
 Scenes
 ======
   
-  AccountManagementScene - manage accounts - .5
+**  AccountManagementScene - manage accounts - .5
   
-  AccountDetailScene - acct notes, #s - 1
+**  AccountDetailScene - acct notes, #s - 1
   
   AccountScene - 3
   
@@ -12,29 +12,15 @@ Scenes
 Non-Scene Stuff
 ========================
 
-  Transfers - should changing category of a transfer simply break the bond of the two entries, rather than deleting both sides?
+***  HandleTransferSaves - 3
   
-  AppIconInHeaders - 1
+**  SetAcctTypeInNewAcctDialog - 2
   
-  FixUpgradeToTransferAndDowngradeFromTransfer - 2
-  
-  SetAcctTypeInNewAcctDialog - 2
+*  AppIconInHeaders - 1
   
   AcctInfoButton - 1
 
-  InAppIcons - 2
-  
-  HelpText - 1
-
-  AboutDialog - 1
-  
-  HelpDialog - 1
-
-  AppIcon - .25
-  
   BreakStringsIntoConstantsInStageAsst - 2
-  
-  AppLogo - .25
   
   WebSite - 12
   

@@ -1,3 +1,0 @@
-Saving an existing transfer *always* deletes it on both ends, then recreates it (if indeed the entry is still a transfer)
-
-Saving an existing non-transfer as a transfer should delete the original transfer
