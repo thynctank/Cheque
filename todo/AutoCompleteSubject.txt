@@ -1,0 +1,1 @@
+Perform like "x%" selects on entries (or only entries for current account? User preference?...)

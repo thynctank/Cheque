@@ -16,6 +16,8 @@ Non-Scene Stuff
   
 **  SetAcctTypeInNewAcctDialog - 2
   
+**  AutoCompleteSubject - 4
+
 *  AppIconInHeaders - 1
   
   AcctInfoButton - 1
@@ -31,7 +33,3 @@ Non-Scene Stuff
   GoogleDocsExport - 6
     
   HandleMaxEntriesStored - 6
-  
-  AutoCompleteSubject - 4
-
-  
