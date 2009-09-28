@@ -18,3 +18,11 @@ For converting a non-transfer to a transfer:
   2. Call acct.transfer()
     2a. Save this account
     2b. Callback
+    
+
+Deleting transfers:
+
+  1. Delete other entry if user agrees based on dialog
+    1a. Save other account
+  2. Delete this entry
+    2a. Save this account
