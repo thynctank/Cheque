@@ -114,9 +114,10 @@ var AccountDialogAssistant = Class.create({
         options.name = this.controller.get("newAccountName").mojo.getValue();
         if(this.controller.get("newAccountBalance").mojo.getValue())
           options.balance = this.controller.get("newAccountBalance").mojo.getValue().toCents();
-        checkbook.addOrAccessAccount(options, function() {
+        checkbook.addOrAccessAccount(options, function(acct) {
           this.sceneAssistant.updateAccounts();
-          this.widget.mojo.close();
+          this.controller.stageController.popScenesTo("dashboard");
+          this.controller.stageController.pushScene("account", acct);
         }.bind(this));
       }
       else
