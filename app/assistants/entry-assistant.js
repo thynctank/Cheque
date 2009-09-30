@@ -21,13 +21,13 @@ EntryAssistant.prototype.setup = function() {
 	/* setup widgets here */
   this.controller.setupWidget("category", {label: "Category"}, this.categoryModel = {choices: [], value: this.entry.category || ""});
   this.controller.setupWidget("transferToAccount", {label: "To Account"}, this.transferModel = {choices: [], value: this.entry.transfer_account_id || ""});
-  this.controller.setupWidget("subject", {focus: true}, this.subjectModel = {value: this.entry.subject || ""});
-  this.controller.setupWidget("amount", {requiresEnterKey: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
+  this.controller.setupWidget("subject", {}, this.subjectModel = {value: this.entry.subject || ""});
+  this.controller.setupWidget("amount", {focus: true, charsAllow: positiveNumericOnly, modifierState: Mojo.Widget.numLock}, this.amountModel = {value: this.entry.amount ? this.entry.amount.toFinancialString() : ""});
   this.controller.setupWidget("cleared", {choices: [
       {label: "Pending", value: "0"},
       {label: "Cleared", value: "1"}
     ]}, this.clearedModel = {value: this.entry.cleared || "0"});
-  this.controller.setupWidget("memo", {requiresEnterKey: true}, this.memoModel = {value: this.entry.memo || ""});
+  this.controller.setupWidget("memo", {}, this.memoModel = {value: this.entry.memo || ""});
   this.controller.setupWidget("date", {labelPlacement: Mojo.Widget.labelPlacementRight}, this.dateModel = {date: this.entry.date ? new Date(this.entry.date) : new Date()});
   this.controller.setupWidget("save", {type: Mojo.Widget.activityButton}, {buttonLabel: "Save"});
   this.controller.setupWidget("detailsDrawer", {}, {open: false});
@@ -130,16 +130,9 @@ EntryAssistant.prototype.setup = function() {
 	  }
 	}.bind(this);
 	
-	this.handleEnter = function(event) {
-    if(event && event.originalEvent && event.originalEvent.keyCode && Mojo.Char.isEnterKey(event.originalEvent.keyCode))
-      this.handleSave();
-  }.bind(this);
-	
 	this.controller.listen("save", Mojo.Event.tap, this.handleSave);
 	this.controller.listen("category", Mojo.Event.propertyChange, this.handlePropChange);
 	$("addlDetails").observe("click", this.handleAddlDetailsToggle);
-	this.controller.listen("amount", Mojo.Event.propertyChange, this.handleEnter);
-	this.controller.listen("memo", Mojo.Event.propertyChange, this.handleEnter);
 };
 
 EntryAssistant.prototype.activate = function(event) {
@@ -191,6 +184,4 @@ EntryAssistant.prototype.cleanup = function(event) {
 	this.controller.stopListening("save", Mojo.Event.tap, this.handleSave);
 	this.controller.stopListening("category", Mojo.Event.propertyChange, this.handlePropChange);
 	$("addlDetails").stopObserving("click", this.handleAddlDetailsToggle);
-	this.controller.stopListening("amount", Mojo.Event.propertyChange, this.handleEnter);
-	this.controller.stopListening("memo", Mojo.Event.propertyChange, this.handleEnter);
 };
