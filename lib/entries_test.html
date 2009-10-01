@@ -53,7 +53,7 @@
             rowsMarkup += "<tr><td>" + entry.subject + "</td>";
             rowsMarkup += "<td>" + change + "</td>";
             rowsMarkup += "<td>" + balance + "</td>";
-            rowsMarkup += "<td><a href='#' onclick='acct.eraseEntry(" + i + ", displayEntries); return false;'>Delete</a></td></tr>";
+            rowsMarkup += "<td><a href='#' onclick='acct.eraseEntry(" + entry.id + ", displayEntries); return false;'>Delete</a></td></tr>";
           }
           var tbl = document.getElementById("entries");
           var tbod = tbl.getElementsByTagName("tbody")[0];

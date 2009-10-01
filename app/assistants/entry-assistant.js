@@ -77,7 +77,7 @@ EntryAssistant.prototype.setup = function() {
 	    
 	    //delete original no matter what
 	    if(this.entry.id) {
-	      this.account.eraseEntry(this.entryIndex, saveEntry);
+	      this.account.eraseEntry(this.entry.id, saveEntry);
 	    }
 	    else
 	      saveEntry();
@@ -99,7 +99,7 @@ EntryAssistant.prototype.setup = function() {
       
       // erase original if it was a transfer
       if(this.entry.originalCategory && this.entry.originalCategory === "Transfer") {
-        this.account.eraseEntry(this.entryIndex, saveEntry);
+        this.account.eraseEntry(this.entry.id, saveEntry);
       }
       else
         saveEntry();

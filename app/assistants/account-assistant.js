@@ -34,7 +34,7 @@ AccountAssistant.prototype.setup = function() {
 	  this.controller.stageController.pushScene("entry", entry, event.index, this.account);
 	}.bind(this);
 	this.handleListDelete = function(event) {
-	  this.account.eraseEntry(event.index, function() {
+	  this.account.eraseEntry(event.item.id, function() {
 	    this.updateEntries();
 	  }.bind(this));
 	}.bind(this);
