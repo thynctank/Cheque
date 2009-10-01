@@ -1,3 +1,8 @@
+New transfers:
+  1. Call acct.transfer()
+    1a. Save this acct
+    1b. Callback
+
 For existing transfers:
 
   Changing amount and/or subject:
@@ -7,7 +12,7 @@ For existing transfers:
       1c. Callback
 
   Changing type:
-    1. Erase other entry
+    1. Erase other entry if user agrees, else convert to simple Deposit/Withdrawal and strip transfer fields
       1a. Save other account async
     2. Erase transfer fields on this entry
       2a. Save this account

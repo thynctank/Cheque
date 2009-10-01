@@ -9,8 +9,6 @@ function EntryAssistant(entry, entryIndex, account) {
 	
 	if(this.entry.category)
 	  this.entry.originalCategory = this.entry.category;
-	  
-	asst = this;
 }
 
 EntryAssistant.prototype.setup = function() {

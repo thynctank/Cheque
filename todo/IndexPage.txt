@@ -12,7 +12,9 @@ Scenes
 Non-Scene Stuff
 ========================
 
-***  HandleTransferSaves - 3
+****  FixCategoryDisplayInEntryScene - .5
+
+***  HandleTransfers - 3
   
 **  SetAcctTypeInNewAcctDialog - 2
   
