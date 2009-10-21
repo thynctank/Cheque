@@ -12,7 +12,9 @@ AccountAssistant.prototype.setup = function() {
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 	
 	/* setup widgets here */
-	$("accountName").update(this.account.name + " Entries");
+	$("accountName").insert({
+	  bottom: this.account.name + " Entries"
+	});
 	
 	this.runningBalance = 0;
 	this.entryListModel = {

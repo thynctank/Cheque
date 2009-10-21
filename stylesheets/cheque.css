@@ -81,3 +81,8 @@
 
 .total {
   font-weight: bold; }
+
+.palm-header img {
+  position: relative;
+  top: 10px;
+  margin-right: 10px; }
