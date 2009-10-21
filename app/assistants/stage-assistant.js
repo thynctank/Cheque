@@ -30,6 +30,9 @@ StageAssistant.prototype.setup = function() {
     // checkbook.storage.logging = true;
   	this.controller.pushScene("dashboard");
   }.bind(this));
+  
+  // make a preference
+  this.controller.setWindowOrientation("free");
 };
 
 StageAssistant.prototype.handleCommand = function(event) {
